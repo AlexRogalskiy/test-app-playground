@@ -1,0 +1,52 @@
+version: "3.9"
+
+x-deploy: &deploy-template
+  deploy:
+    mode: global
+
+x-logging: &logging-template
+  logging:
+    options:
+      max-size: "100m"
+      max-file: "10"
+
+x-restart: &restart-template
+  restart: unless-stopped
+
+services:
+  app:
+    <<: *logging-template
+    <<: *restart-template
+    <<: *deploy-template
+    container_name: ${APP_CONTAINER_NAME:-app}
+    image: ${APP_IMAGE_NAME:-app-rest-api}:${APP_IMAGE_TAG:-latest}
+    build:
+      context: "../app"
+      dockerfile: Dockerfile
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --fail --silent localhost:5000 || exit 1" ]
+      start_period: 40s
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+  test-app:
+    <<: *logging-template
+    <<: *restart-template
+    <<: *deploy-template
+    container_name: ${TEST_APP_CONTAINER_NAME:-test-app}
+    image: ${TEST_APP_IMAGE_NAME:-test-app-rest-api}:${TEST_APP_IMAGE_TAG:-latest}
+    build:
+      context: "../test-app"
+      dockerfile: Dockerfile
+    environment:
+      TARGET_APP_HOST: ${TARGET_APP_HOST}
+    depends_on:
+      app:
+        condition: service_healthy
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1450

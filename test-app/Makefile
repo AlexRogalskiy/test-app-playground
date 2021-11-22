@@ -1,0 +1,80 @@
+include ../common.mk
+
+############################################################################
+# Variables
+############################################################################
+
+# IMAGE defines docker image
+IMAGE ?= test-app-playground
+# TAG defines docker tag
+TAG ?= latest
+
+# MVN_CMD stores maven package manager
+MVN_CMD := $(shell command -v ./mvnw || command -v mvn)
+# DOCKER_CMD stores docker command
+DOCKER_CMD := $(shell command -v docker)
+# MAVEN_ARGS stores default maven arguments
+MAVEN_ARGS := --file $(ROOT_DIR)/test-app/pom.xml --show-version --batch-mode --errors --lax-checksums -Dinvoker.skip=true -Dmaven.exec.skip=true -Dmaven.install.skip -Dmaven.resources.skip -Dmaven.test.skip=true
+
+# Run all by default when "make" is invoked.
+.DEFAULT_GOAL := help
+
+############################################################################
+# Targets
+############################################################################
+
+# Run information command with target descriptions.
+.PHONY: help
+##= docker-build: to build docker image
+##= build: to build project dependencies
+##= test: to run project tests
+##= update: to update project dependencies
+##= version: to create new release version
+##= format: to format java files
+##= lint: to lint java files
+help:
+	$(AT)echo
+	$(AT)echo
+	$(AT)echo "Please use [make <target>] where <target> is one of:"
+	$(AT)echo
+	$(AT)sed -n 's/^##=//p' $(MAKEFILE_LIST) 2>/dev/null | column -t -s ':' |  sed -e 's/^/ /'
+	$(AT)echo
+	$(AT)echo
+
+# Run docker build command.
+.PHONY: docker-build
+docker-build:
+	$(DOCKER_CMD) build --rm --platform=linux/$(UNAME_ARCH) -f Dockerfile -t "$(IMAGE):$(TAG)" -t "$(IMAGE):$(GIT_SHA)" .
+
+# Run maven build command.
+.PHONY: build
+build:
+	$(MVN_CMD) clean package $(MAVEN_ARGS)
+
+# Run maven test command.
+.PHONY: test
+test:
+	$(MVN_CMD) clean test $(MAVEN_ARGS) -Dmaven.test.skip=false
+
+# Run maven update dependencies command.
+.PHONY: update
+update:
+	$(MVN_CMD) versions:display-dependency-updates && $(MVN_CMD) versions:display-plugin-updates
+
+# Run maven new version build.
+.PHONY: version
+version: _ensure-version
+	$(MVN_CMD) versions:set \
+		-DnewVersion=$(BUILD_VERSION)
+		-Dmessage="prepare release $(BUILD_VERSION)"
+		-DpushChanges=false -DgenerateBackupPoms=false -B 1>/dev/null 2>/dev/null
+
+# Run maven spotless format command.
+.PHONY: format
+format:
+	$(MVN_CMD) spotless:apply $(MAVEN_ARGS) -Pcheckstyle
+
+# Run maven spotless check command.
+.PHONY: lint
+lint:
+	$(MVN_CMD) spotless:check $(MAVEN_ARGS) -Pcheckstyle

@@ -1,0 +1,35 @@
+#
+# Standard ignore list (do not edit manually)
+#
+bin/
+tmp/
+build/*
+target/
+log/
+site/
+allure-results/
+
+.settings/
+.idea/
+.reporting/
+.build/
+
+.DS_Store
+.metadata
+.gradle
+.classpath
+.project
+.allure
+.storage
+
+*.env
+*.iml
+*.iws
+*.bak
+*.episode
+*.log
+*.props
+*.jar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*

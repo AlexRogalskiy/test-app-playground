@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>test-app-playground</name>
+	<url>https://github.com/AlexRogalskiy/java-patterns/test-app-playground</url>
+	<description>Arenadata Test Application playground</description>
+	<inceptionYear>2021</inceptionYear>
+
+	<groupId>tech.arenadata.api.test</groupId>
+	<artifactId>rest-api-playground</artifactId>
+	<version>1.0.0</version>
+
+	<properties>
+		<!-- globals -->
+		<java.version>11</java.version>
+		<maven.version>3.6.0</maven.version>
+
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<maven.compiler.parameters>true</maven.compiler.parameters>
+		<maven.compiler.showWarnings>true</maven.compiler.showWarnings>
+		<maven.javadoc.failOnError>false</maven.javadoc.failOnError>
+		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss z</maven.build.timestamp.format>
+
+		<encoding>UTF-8</encoding>
+		<project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+		<project.build.resourceEncoding>${encoding}</project.build.resourceEncoding>
+		<project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
+
+		<!-- dependencies -->
+		<lombok.version>1.18.22</lombok.version>
+		<commons-lang3.version>3.12.0</commons-lang3.version>
+		<httpclient.version>4.5.13</httpclient.version>
+		<httpcore.version>4.4.14</httpcore.version>
+		<google-error-prone.version>2.10.0</google-error-prone.version>
+		<jackson.version>2.13.0</jackson.version>
+		<testcontainers.version>1.16.0</testcontainers.version>
+		<aspectj.version>1.9.6</aspectj.version>
+		<junit-jupiter.version>5.8.1</junit-jupiter.version>
+		<junit-platform.version>1.8.1</junit-platform.version>
+		<assertj.version>3.21.0</assertj.version>
+		<cucumber.version>7.0.0</cucumber.version>
+		<allure.version>2.16.1</allure.version>
+
+		<logback.version>1.3.0-alpha10</logback.version>
+		<logback-contrib.version>0.1.5</logback-contrib.version>
+		<logstash-logback.version>7.0.1</logstash-logback.version>
+
+		<!-- plugins -->
+		<maven-cucumber-reporting.version>5.6.2</maven-cucumber-reporting.version>
+		<maven-spotless-plugin.version>2.17.0</maven-spotless-plugin.version>
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+		<maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+		<maven-allure-plugin.version>2.10.0</maven-allure-plugin.version>
+		<maven-help-plugin.version>3.2.0</maven-help-plugin.version>
+		<maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
+	</properties>
+
+	<issueManagement>
+		<url>https://github.com/AlexRogalskiy/test-app-playground/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+
+	<distributionManagement>
+		<site>
+			<id>GitHub</id>
+			<name>GitHub</name>
+			<url>scm:git:git@github.com/AlexRogalskiy/test-app-playground.git</url>
+		</site>
+	</distributionManagement>
+
+	<licenses>
+		<license>
+			<name>MIT</name>
+			<url>
+				https://github.com/AlexRogalskiy/test-app-playground/blob/master/LICENSE.txt
+			</url>
+			<distribution>repo</distribution>
+			<comments>MIT license</comments>
+		</license>
+	</licenses>
+
+	<profiles>
+		<!-- Spotless profile -->
+
+		<profile>
+			<id>report</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>net.masterthought</groupId>
+						<artifactId>maven-cucumber-reporting</artifactId>
+						<version>${maven-cucumber-reporting.version}</version>
+						<executions>
+							<execution>
+								<id>execution</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<projectName>${project.name}</projectName>
+									<!-- output directory for the generated report -->
+									<outputDirectory>${project.build.directory}/site/cucumber-reports</outputDirectory>
+
+
+									<!-- optional, defaults to outputDirectory if not specified -->
+									<inputDirectory>${project.build.directory}/cucumber</inputDirectory>
+
+									<jsonFiles>
+										<!-- supports wildcard or name pattern -->
+										<param>**/*.json</param>
+									</jsonFiles>
+
+									<!-- optional, defaults to outputDirectory if not specified -->
+									<classificationDirectory>${project.build.directory}/classifications</classificationDirectory>
+
+									<!--shows additional column in report - 'Device'-->
+									<!--                            <parallelTesting>true</parallelTesting>-->
+									<!-- optional, set true to fail build on test failures -->
+									<checkBuildResult>false</checkBuildResult>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- Checkstyle profile -->
+		<profile>
+			<id>checkstyle</id>
+			<properties>
+				<java-format.version>1.8</java-format.version>
+				<java-format.style>AOSP</java-format.style>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.diffplug.spotless</groupId>
+						<artifactId>spotless-maven-plugin</artifactId>
+						<version>${maven-spotless-plugin.version}</version>
+						<configuration>
+							<java>
+								<googleJavaFormat>
+									<version>${java-format.version}</version>
+									<style>${java-format.style}</style>
+								</googleJavaFormat>
+								<licenseHeader>
+									<delimiter>package</delimiter>
+									<file>${session.executionRootDirectory}/license/license-header.txt</file>
+								</licenseHeader>
+								<trimTrailingWhitespace/>
+								<removeUnusedImports/>
+								<endWithNewline/>
+								<indent>
+									<tabs>true</tabs>
+									<spacesPerTab>4</spacesPerTab>
+								</indent>
+							</java>
+						</configuration>
+						<executions>
+							<execution>
+								<id>spotless-check</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- Development profile -->
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<maven.repackage.skip>false</maven.repackage.skip>
+				<maven.devtools.exclude>false</maven.devtools.exclude>
+				<maven.compiler.debug>true</maven.compiler.debug>
+				<maven.compiler.debuglevel>lines,vars,source</maven.compiler.debuglevel>
+				<maven.compiler.verbose>true</maven.compiler.verbose>
+				<maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
+			</properties>
+		</profile>
+	</profiles>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>${junit-jupiter.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>${testcontainers.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson</groupId>
+				<artifactId>jackson-bom</artifactId>
+				<version>${jackson.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>io.cucumber</groupId>
+				<artifactId>cucumber-bom</artifactId>
+				<version>${cucumber.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- Logback dependencies -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback.contrib</groupId>
+			<artifactId>logback-json-classic</artifactId>
+			<version>${logback-contrib.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback.contrib</groupId>
+			<artifactId>logback-jackson</artifactId>
+			<version>${logback-contrib.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>${logstash-logback.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Http client -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${httpclient.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>${httpcore.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Commons dependencies -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Google dependencies -->
+		<dependency>
+			<groupId>com.google.errorprone</groupId>
+			<artifactId>error_prone_annotations</artifactId>
+			<version>${google-error-prone.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- Lombok dependencies -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Junit5 dependencies -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-migrationsupport</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
+			<version>${junit-platform.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-runner</artifactId>
+			<version>${junit-platform.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-commons</artifactId>
+			<version>${junit-platform.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-engine</artifactId>
+			<version>${junit-platform.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-suite</artifactId>
+			<version>${junit-platform.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-suite-api</artifactId>
+			<version>${junit-platform.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Assertj dependencies -->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>${assertj.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Cucumber dependencies -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit-platform-engine</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Allure dependencies -->
+		<dependency>
+			<groupId>io.qameta.allure</groupId>
+			<artifactId>allure-cucumber-jvm</artifactId>
+			<version>${allure.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- TestContainers dependencies -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+			<version>${testcontainers.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<annotationProcessorPath>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</annotationProcessorPath>
+						<annotationProcessorPath>
+							<groupId>com.google.errorprone</groupId>
+							<artifactId>error_prone_core</artifactId>
+							<version>${google-error-prone.version}</version>
+						</annotationProcessorPath>
+					</annotationProcessorPaths>
+					<optimize>false</optimize>
+					<forceJavacCompilerUse>true</forceJavacCompilerUse>
+					<meminitial>128m</meminitial>
+					<maxmem>512m</maxmem>
+
+					<compilerArgs>
+						<arg>-XDcompilePolicy=byfile</arg>
+						<arg>-Xplugin:ErrorProne -XepDisableWarningsInGeneratedCode -Xep:NestedInstanceOfConditions:OFF
+							-Xep:ParameterName:OFF -Xep:SameNameButDifferent:OFF -Xep:FunctionalInterfaceMethodChanged:OFF
+						</arg>
+					</compilerArgs>
+
+					<compilerVersion>${java.version}</compilerVersion>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<encoding>${encoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
+				<configuration>
+					<reuseForks>false</reuseForks>
+					<forkCount>1</forkCount>
+					<useSystemClassLoader>false</useSystemClassLoader>
+					<testFailureIgnore>true</testFailureIgnore>
+					<argLine>
+						-Dfile.encoding=UTF
+						-Djdk.net.URLClassPath.disableClassPathURLCheck=true
+						-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+					</argLine>
+					<classpathDependencyExcludes>
+						<classpathDependencyExcludes>org.projectlombok:lombok</classpathDependencyExcludes>
+					</classpathDependencyExcludes>
+					<properties>
+						<property>
+							<name>listener</name>
+							<value>org.junit.platform.launcher.listeners.SummaryGeneratingListener</value>
+						</property>
+					</properties>
+					<systemProperties>
+						<property>
+							<name>allure.results.directory</name>
+							<value>${project.build.directory}/allure-results</value>
+						</property>
+						<property>
+							<name>allure.reports.directory</name>
+							<value>${project.build.directory}/allure-reports</value>
+						</property>
+					</systemProperties>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjweaver</artifactId>
+						<version>${aspectj.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+			<plugin>
+				<groupId>io.qameta.allure</groupId>
+				<artifactId>allure-maven</artifactId>
+				<version>${maven-allure-plugin.version}</version>
+				<configuration>
+					<reportVersion>${allure-report.version}</reportVersion>
+					<outputDirectory>${project.build.directory}</outputDirectory>
+					<reportingOutputDirectory>${project.build.directory}</reportingOutputDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-help-plugin</artifactId>
+				<version>${maven-help-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>show-profiles</id>
+						<goals>
+							<goal>active-profiles</goal>
+						</goals>
+						<phase>compile</phase>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>${maven-enforcer-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>[${maven.version},)</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+					<execution>
+						<id>enforce-java</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireJavaVersion>
+									<version>[${java.version},)</version>
+								</requireJavaVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
