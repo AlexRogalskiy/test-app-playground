@@ -4,14 +4,15 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<name>test-app-playground</name>
-	<url>https://github.com/AlexRogalskiy/java-patterns/test-app-playground</url>
+	<name>tech.arenadata.test.api.playground</name>
+	<url>https://github.com/AlexRogalskiy/test-app-playground</url>
 	<description>Arenadata Test Application playground</description>
 	<inceptionYear>2021</inceptionYear>
 
 	<groupId>tech.arenadata.api.test</groupId>
-	<artifactId>rest-api-playground</artifactId>
+	<artifactId>test-api-playground</artifactId>
 	<version>1.0.0</version>
+	<packaging>pom</packaging>
 
 	<properties>
 		<!-- globals -->
@@ -32,24 +33,20 @@
 
 		<!-- dependencies -->
 		<lombok.version>1.18.22</lombok.version>
-		<commons-lang3.version>3.12.0</commons-lang3.version>
-		<httpclient.version>4.5.13</httpclient.version>
-		<httpcore.version>4.4.14</httpcore.version>
 		<google-error-prone.version>2.10.0</google-error-prone.version>
 		<jackson.version>2.13.0</jackson.version>
 		<testcontainers.version>1.16.0</testcontainers.version>
 		<aspectj.version>1.9.6</aspectj.version>
 		<junit-jupiter.version>5.8.1</junit-jupiter.version>
-		<junit-platform.version>1.8.1</junit-platform.version>
 		<assertj.version>3.21.0</assertj.version>
 		<cucumber.version>7.0.0</cucumber.version>
-		<allure.version>2.16.1</allure.version>
 
 		<logback.version>1.3.0-alpha10</logback.version>
 		<logback-contrib.version>0.1.5</logback-contrib.version>
 		<logstash-logback.version>7.0.1</logstash-logback.version>
 
 		<!-- plugins -->
+		<maven-os-plugin.version>1.7.0</maven-os-plugin.version>
 		<maven-cucumber-reporting.version>5.6.2</maven-cucumber-reporting.version>
 		<maven-spotless-plugin.version>2.17.0</maven-spotless-plugin.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -83,9 +80,16 @@
 		</license>
 	</licenses>
 
-	<profiles>
-		<!-- Spotless profile -->
+	<modules>
+		<module>modules/assertions</module>
+		<module>modules/client</module>
+		<module>modules/commons</module>
+		<module>modules/extensions</module>
+		<module>modules/it</module>
+	</modules>
 
+	<profiles>
+		<!-- Report profile -->
 		<profile>
 			<id>report</id>
 			<build>
@@ -253,34 +257,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Http client -->
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>${httpclient.version}</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
-			<version>${httpcore.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Commons dependencies -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- Google dependencies -->
 		<dependency>
 			<groupId>com.google.errorprone</groupId>
@@ -297,119 +273,25 @@
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
-
-		<!-- Junit5 dependencies -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>${junit-jupiter.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-migrationsupport</artifactId>
-			<version>${junit-jupiter.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.hamcrest</groupId>
-					<artifactId>hamcrest-core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-params</artifactId>
-			<version>${junit-jupiter.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>${junit-jupiter.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-launcher</artifactId>
-			<version>${junit-platform.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-runner</artifactId>
-			<version>${junit-platform.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-commons</artifactId>
-			<version>${junit-platform.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-engine</artifactId>
-			<version>${junit-platform.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-suite</artifactId>
-			<version>${junit-platform.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-suite-api</artifactId>
-			<version>${junit-platform.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Assertj dependencies -->
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<version>${assertj.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Cucumber dependencies -->
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-junit-platform-engine</artifactId>
-			<version>${cucumber.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-java</artifactId>
-			<version>${cucumber.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Allure dependencies -->
-		<dependency>
-			<groupId>io.qameta.allure</groupId>
-			<artifactId>allure-cucumber-jvm</artifactId>
-			<version>${allure.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- TestContainers dependencies -->
-		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>testcontainers</artifactId>
-			<version>${testcontainers.version}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
+		<directory>${maven.multiModuleProjectDirectory}/.build/bin/${project.name}</directory>
+
+		<extensions>
+			<extension>
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId>
+				<version>${maven-os-plugin.version}</version>
+			</extension>
+		</extensions>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven-compiler-plugin.version}</version>
+				<extensions>true</extensions>
 				<configuration>
 					<annotationProcessorPaths>
 						<annotationProcessorPath>

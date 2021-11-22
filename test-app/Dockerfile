@@ -17,7 +17,7 @@ FROM openjdk:11-slim
 ## setup image arguments
 ARG IMAGE_NAME="test-app-playground"
 ARG IMAGE_DESCRIPTION="Arenadata Test Application playground"
-ARG IMAGE_URL="https://github.com/AlexRogalskiy/java-patterns/test-app-playground"
+ARG IMAGE_URL="https://github.com/AlexRogalskiy/test-app-playground"
 ARG IMAGE_REVISION="$(git rev-parse HEAD)"
 ARG IMAGE_VERSION="$(git describe --abbrev=0 --tag)"
 ARG IMAGE_BUILD_DATE="$(date -u +\"%Y-%m-%dT%H:%M:%SZ\")"
@@ -25,7 +25,7 @@ ARG IMAGE_BUILD_DATE="$(date -u +\"%Y-%m-%dT%H:%M:%SZ\")"
 ARG JAR_FILE="*.jar"
 ARG APP_DIR="/home/app"
 ARG LIB_DIR="/usr/local/lib"
-ARG BUILD_DIR="target"
+ARG BUILD_DIR=".build/bin/tech.arenadata.api.test.it"
 
 ## setup environment variables
 ENV APP_DIR="$APP_DIR" \
