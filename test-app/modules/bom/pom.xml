@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>tech.arenadata.api.test</groupId>
+		<artifactId>test-api-playground</artifactId>
+		<version>1.0.0</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<name>tech.arenadata.api.test.bom</name>
+	<url>https://github.com/AlexRogalskiy/test-app-playground/blob/master/modules/bom</url>
+	<description>Arenadata Test API bom</description>
+	<inceptionYear>2021</inceptionYear>
+	<artifactId>test-api-bom</artifactId>
+	<packaging>pom</packaging>
+
+	<properties>
+		<!-- versions -->
+		<test-api-commons.version>1.0.0</test-api-commons.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Test API BOM dependencies -->
+			<dependency>
+				<groupId>tech.arenadata.api.test</groupId>
+				<artifactId>test-api-assertions</artifactId>
+				<version>${test-api-commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>tech.arenadata.api.test</groupId>
+				<artifactId>test-api-client</artifactId>
+				<version>${test-api-commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>tech.arenadata.api.test</groupId>
+				<artifactId>test-api-commons</artifactId>
+				<version>${test-api-commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>tech.arenadata.api.test</groupId>
+				<artifactId>test-api-extensions</artifactId>
+				<version>${test-api-commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>tech.arenadata.api.test</groupId>
+				<artifactId>test-api-it</artifactId>
+				<version>${test-api-commons.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<defaultGoal>clean package</defaultGoal>
+		<finalName>${project.groupId}-${project.artifactId}-${project.version}</finalName>
+	</build>
+</project>

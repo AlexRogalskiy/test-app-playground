@@ -7,10 +7,10 @@ import java.util.Locale;
 import static java.util.Optional.ofNullable;
 
 /**
- * Locale holder helper
+ * Thread local locale holder
  */
 @UtilityClass
-public class LocaleContextHolder {
+public class LocaleHolder {
 	/**
 	 * Thread local {@link Locale} holder with default locale
 	 */

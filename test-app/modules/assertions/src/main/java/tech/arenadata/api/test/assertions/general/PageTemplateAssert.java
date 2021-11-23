@@ -1,6 +1,5 @@
 package tech.arenadata.api.test.assertions.general;
 
-import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.AbstractAssert;
 import tech.arenadata.api.test.assertions.model.ItemTemplate;
 import tech.arenadata.api.test.assertions.model.PageTemplate;
@@ -14,31 +13,33 @@ import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * Page template {@link AbstractAssert} implementation provided with following validation rules:
+ * - has items by values
+ * - has all items by predicate
+ * - has no items by predicate
+ * - has any items by predicate
  * - has items
- * - has all items
  * - has no items
- * - has any items
- * - has all unique
+ * - has all unique by predicate
  */
-public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageTemplate> {
+class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageTemplate> {
 
-	protected PageTemplateAssert(final PageTemplate template) {
+	PageTemplateAssert(final PageTemplate template) {
 		super(template, PageTemplateAssert.class);
 	}
 
-	public static PageTemplateAssert assertThat(final PageTemplate template) {
-		return new PageTemplateAssert(template);
-	}
-
 	public PageTemplateAssert hasItems(final ItemTemplate... itemTemplates) {
+		this.isNotNull();
+
 		final var items = this.actual.getItems();
 		if (!items.containsAll(Arrays.asList(itemTemplates))) {
-			failWithMessage("expected page template contains <%s> but was <%s>", join(itemTemplates), StringUtils.join(items));
+			failWithMessage("expected page template should contains <%s> but was <%s>", join(itemTemplates), join(items));
 		}
 		return this;
 	}
 
 	public PageTemplateAssert hasAllItems(final Predicate<? super ItemTemplate> predicate) {
+		this.isNotNull();
+
 		final var items = this.actual.getItems();
 		if (!items.stream().allMatch(predicate)) {
 			failWithMessage("expected page template should match item template predicate");
@@ -47,6 +48,8 @@ public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageT
 	}
 
 	public PageTemplateAssert hasNoItems(final Predicate<? super ItemTemplate> predicate) {
+		this.isNotNull();
+
 		final var items = this.actual.getItems();
 		if (items.stream().anyMatch(predicate)) {
 			failWithMessage("expected page template should match item template predicate");
@@ -55,6 +58,8 @@ public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageT
 	}
 
 	public PageTemplateAssert hasAnyItems(final Predicate<? super ItemTemplate> predicate) {
+		this.isNotNull();
+
 		final var items = this.actual.getItems();
 		if (items.stream().noneMatch(predicate)) {
 			failWithMessage("expected page template should match item template predicate");
@@ -62,7 +67,29 @@ public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageT
 		return this;
 	}
 
+	public PageTemplateAssert hasItems() {
+		this.isNotNull();
+
+		final var items = this.actual.getItems();
+		if (items.isEmpty()) {
+			failWithMessage("expected page template should contain items but was <%s>", join(items));
+		}
+		return this;
+	}
+
+	public PageTemplateAssert hasNoItems() {
+		this.isNotNull();
+
+		final var items = this.actual.getItems();
+		if (!items.isEmpty()) {
+			failWithMessage("expected page template should contain no items but was <%s>", join(items));
+		}
+		return this;
+	}
+
 	public <T> PageTemplateAssert hasAllUnique(final Function<ItemTemplate, T> mapper) {
+		this.isNotNull();
+
 		final var items = this.actual.getItems();
 		if (!items.stream().map(mapper).allMatch(new HashSet<>()::add)) {
 			failWithMessage("expected page template should contains unique item templates");
@@ -77,6 +104,8 @@ public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageT
 	 * @return item template
 	 */
 	public ItemTemplate getItem(final int index) {
+		this.isNotNull();
+
 		return this.actual.getItems().get(index);
 	}
 }

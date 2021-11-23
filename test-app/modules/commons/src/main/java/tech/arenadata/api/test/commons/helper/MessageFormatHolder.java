@@ -8,10 +8,10 @@ import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
- * Message format holder helper
+ * Thread local message format holder
  */
 @UtilityClass
-public class MessageContextHolder {
+public class MessageFormatHolder {
 	/**
 	 * Thread local {@link MessageFormat} holder with empty value
 	 */

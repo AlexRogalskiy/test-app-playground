@@ -2,8 +2,8 @@ package tech.arenadata.api.test.commons.factory;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import tech.arenadata.api.test.commons.helper.LocaleContextHolder;
-import tech.arenadata.api.test.commons.helper.MessageContextHolder;
+import tech.arenadata.api.test.commons.helper.LocaleHolder;
+import tech.arenadata.api.test.commons.helper.MessageFormatHolder;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -58,7 +58,7 @@ public final class MessageFactory {
 	 * @return localized resource message
 	 */
 	public String getMessage(final String messageKey, final Locale locale, final Object... arguments) {
-		final var formatter = MessageContextHolder.get();
+		final var formatter = MessageFormatHolder.get();
 		final var pattern = getResourceBundle(locale).getString(messageKey);
 		formatter.applyPattern(pattern);
 
@@ -73,6 +73,6 @@ public final class MessageFactory {
 	 * @return resource message
 	 */
 	public String getMessage(final String messageKey, final Object... arguments) {
-		return getMessage(messageKey, LocaleContextHolder.get(), arguments);
+		return getMessage(messageKey, LocaleHolder.get(), arguments);
 	}
 }

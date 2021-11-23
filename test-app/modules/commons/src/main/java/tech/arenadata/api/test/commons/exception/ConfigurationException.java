@@ -50,7 +50,7 @@ public class ConfigurationException extends RuntimeException {
 	 */
 	@NonNull
 	public static ConfigurationException createError(@NonNull final String message) {
-		throw new ConfigurationException(message);
+		return new ConfigurationException(message);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class ConfigurationException extends RuntimeException {
 	 */
 	@NonNull
 	public static ConfigurationException createHostError(final Object... args) {
-		throw createError(CONFIGURATION_HOST_ERROR.getLocalizedMessage(args));
+		return createError(CONFIGURATION_HOST_ERROR.getLocalizedMessage(args));
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class ConfigurationException extends RuntimeException {
 	 */
 	@NonNull
 	public static ConfigurationException createPortError(final Object... args) {
-		throw createError(CONFIGURATION_PORT_ERROR.getLocalizedMessage(args));
+		return createError(CONFIGURATION_PORT_ERROR.getLocalizedMessage(args));
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class ConfigurationException extends RuntimeException {
 	 */
 	@NonNull
 	public static ConfigurationException createPathError(final Object... args) {
-		throw createError(CONFIGURATION_PATH_ERROR.getLocalizedMessage(args));
+		return createError(CONFIGURATION_PATH_ERROR.getLocalizedMessage(args));
 	}
 
 	/**
@@ -94,6 +94,6 @@ public class ConfigurationException extends RuntimeException {
 	 */
 	@NonNull
 	public static ConfigurationException createMessagesBasenameError(final Object... args) {
-		throw createError(CONFIGURATION_MESSAGES_BASENAME_ERROR.getLocalizedMessage(args));
+		return createError(CONFIGURATION_MESSAGES_BASENAME_ERROR.getLocalizedMessage(args));
 	}
 }

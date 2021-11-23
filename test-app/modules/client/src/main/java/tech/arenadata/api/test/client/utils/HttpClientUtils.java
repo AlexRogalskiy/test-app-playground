@@ -38,6 +38,7 @@ public class HttpClientUtils {
 	 */
 	public static HttpGet createGetRequest(final String endpointUrl, final Header... headers) {
 		final var request = new HttpGet(endpointUrl);
+		request.setHeaders(NO_CACHE_HEADERS);
 		Stream.ofNullable(headers).forEach(request::setHeaders);
 
 		return request;

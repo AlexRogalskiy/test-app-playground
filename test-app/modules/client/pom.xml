@@ -30,15 +30,9 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>${httpclient.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
-		<!-- Commons dependencies-->
+		<!-- Test Api dependencies-->
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-commons</artifactId>

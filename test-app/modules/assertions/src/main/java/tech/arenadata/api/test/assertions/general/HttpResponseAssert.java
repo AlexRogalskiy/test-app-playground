@@ -8,7 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
 import org.assertj.core.api.AbstractAssert;
-import tech.arenadata.api.test.assertions.helper.JsonParser;
+import tech.arenadata.api.test.commons.helper.JsonParser;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -20,28 +20,27 @@ import static org.apache.commons.lang3.StringUtils.join;
  * - response status code
  * - response reason phrase
  * - response protocol version
- * - response header(s)
+ * - response header / headers
  * - response content
  * - response content length
- * - response field(s)/value(s)
+ * - response field value / field values
+ * - response field / fields
  */
 @Slf4j
-public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse> {
+class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse> {
 
 	private final String content;
 	private final JsonParser jsonParser;
 
-	private HttpResponseAssert(final HttpResponse response, final JsonParser jsonParser) {
+	HttpResponseAssert(final HttpResponse response, final JsonParser jsonParser) {
 		super(response, HttpResponseAssert.class);
 		this.content = this.extractContent(response);
 		this.jsonParser = jsonParser;
 	}
 
-	public static HttpResponseAssert assertThat(final HttpResponse actual) {
-		return new HttpResponseAssert(actual, new JsonParser());
-	}
-
 	public HttpResponseAssert hasStatusCode(final int expectedStatusCode) {
+		this.isNotNull();
+
 		final var statusCode = this.actual.getStatusLine().getStatusCode();
 		if (statusCode != expectedStatusCode) {
 			failWithMessage("expected response status code to be <%s> but was <%s>", expectedStatusCode, statusCode);
@@ -50,6 +49,8 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 	}
 
 	public HttpResponseAssert hasReasonPhrase(final String expectedReasonPhrase) {
+		this.isNotNull();
+
 		final var reasonPhrase = this.actual.getStatusLine().getReasonPhrase();
 		if (!Objects.equals(reasonPhrase, expectedReasonPhrase)) {
 			failWithMessage("expected response reason phrase to be <%s> but was <%s>", expectedReasonPhrase, reasonPhrase);
@@ -58,6 +59,8 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 	}
 
 	public HttpResponseAssert hasProtocolVersion(final ProtocolVersion expectedProtocolVersion) {
+		this.isNotNull();
+
 		final var protocolVersion = this.actual.getStatusLine().getProtocolVersion();
 		if (!Objects.equals(protocolVersion, expectedProtocolVersion)) {
 			failWithMessage("expected response protocol version to be <%s> but was <%s>", expectedProtocolVersion, protocolVersion);
@@ -66,6 +69,8 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 	}
 
 	public HttpResponseAssert hasHeader(final String expectedHeader) {
+		this.isNotNull();
+
 		if (!this.actual.containsHeader(expectedHeader)) {
 			failWithMessage("expected response header to be <%s> but was <%s>", expectedHeader, join(this.actual.getAllHeaders()));
 		}
@@ -79,6 +84,8 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 
 	@SneakyThrows
 	public HttpResponseAssert hasContent(final String expectedContent) {
+		this.isNotNull();
+
 		if (!Objects.equals(this.content, expectedContent)) {
 			failWithMessage("expected response content to be <%s> but was <%s>", expectedContent, content);
 		}
@@ -86,6 +93,8 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 	}
 
 	public HttpResponseAssert hasContentLength(final long expectedContentLength) {
+		this.isNotNull();
+
 		final var contentLength = this.actual.getEntity().getContentLength();
 		if (contentLength != expectedContentLength) {
 			failWithMessage("expected response content length to be <%s> but was <%s>", expectedContentLength, contentLength);
@@ -95,6 +104,8 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 
 	@SneakyThrows
 	public HttpResponseAssert hasFieldValue(final String expectedFieldName, final String expectedFieldValue) {
+		this.isNotNull();
+
 		final var fieldValue = this.jsonParser.getField(this.content, expectedFieldName);
 		if (!Objects.equals(fieldValue, expectedFieldValue)) {
 			failWithMessage("expected response content field value to be <%s> but was <%s>", expectedFieldValue, fieldValue);
@@ -109,6 +120,8 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 
 	@SneakyThrows
 	public HttpResponseAssert hasField(final String expectedFieldName) {
+		this.isNotNull();
+
 		final var fieldNameExists = this.jsonParser.hasField(this.content, expectedFieldName);
 		if (!fieldNameExists) {
 			failWithMessage("expected response content field name to be <%s> but was none", expectedFieldName);

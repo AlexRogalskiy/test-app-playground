@@ -23,7 +23,14 @@
 	</properties>
 
 	<dependencies>
-		<!-- Commons dependencies-->
+		<!-- Junit5 dependencies -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit-jupiter.version}</version>
+		</dependency>
+
+		<!-- Test Api dependencies-->
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-commons</artifactId>

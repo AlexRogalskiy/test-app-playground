@@ -69,7 +69,7 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
-		<!-- Commons dependencies-->
+		<!-- Test Api dependencies-->
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-commons</artifactId>

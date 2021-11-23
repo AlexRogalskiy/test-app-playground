@@ -27,7 +27,11 @@ public enum GeneralErrorTemplateType implements ErrorTemplate {
 	/**
 	 * Unsupported messages basename
 	 */
-	CONFIGURATION_MESSAGES_BASENAME_ERROR("error.configuration.messages.basename.invalid");
+	CONFIGURATION_MESSAGES_BASENAME_ERROR("error.configuration.messages.basename.invalid"),
+	/**
+	 * Invalid json parse exception
+	 */
+	DATA_JSON_PARSE_ERROR("error.data.json.parse.invalid");
 
 	/**
 	 * {@link String} message code

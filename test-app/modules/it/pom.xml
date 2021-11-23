@@ -22,10 +22,129 @@
 		<allure.version>2.16.1</allure.version>
 		<junit-platform.version>1.8.1</junit-platform.version>
 
-		<test-api-commons.version>1.0.0</test-api-commons.version>
+		<test-api.version>1.0.0</test-api.version>
 	</properties>
 
+	<profiles>
+		<!-- Contract tests profile -->
+		<profile>
+			<id>it</id>
+			<properties>
+				<surefire.commands>
+					--enable-preview
+				</surefire.commands>
+				<surefire.file>
+					-Dfile.encoding=${project.build.sourceEncoding}
+				</surefire.file>
+				<surefire.memory>
+					-Xmx1024m
+					-XX:ReservedCodeCacheSize=1G
+					-Dsun.zip.disableMemoryMapping=true
+				</surefire.memory>
+				<surefire.network>
+					-Djava.net.preferIPv4Stack=true
+					-Djdk.net.URLClassPath.disableClassPathURLCheck=true
+				</surefire.network>
+				<surefire.timezone>
+					-Duser.timezone=Europe/Moscow
+				</surefire.timezone>
+				<surefire.agent>
+					-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+				</surefire.agent>
+			</properties>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<version>${maven-surefire-plugin.version}</version>
+							<configuration>
+								<reuseForks>false</reuseForks>
+								<forkCount>1</forkCount>
+								<useSystemClassLoader>false</useSystemClassLoader>
+								<testFailureIgnore>false</testFailureIgnore>
+								<forkNode implementation="org.apache.maven.plugin.surefire.extensions.SurefireForkNodeFactory"/>
+								<argLine>
+									${surefire.agent}
+									${surefire.memory}
+									${surefire.file}
+									${surefire.network}
+									${surefire.timezone}
+									${surefire.commands}
+								</argLine>
+								<classpathDependencyExcludes>
+									<classpathDependencyExcludes>org.projectlombok:lombok</classpathDependencyExcludes>
+								</classpathDependencyExcludes>
+								<properties>
+									<property>
+										<name>listener</name>
+										<value>org.junit.platform.launcher.listeners.SummaryGeneratingListener</value>
+									</property>
+								</properties>
+								<systemProperties>
+									<property>
+										<name>allure.results.directory</name>
+										<value>${project.build.directory}/allure-results</value>
+									</property>
+									<property>
+										<name>allure.reports.directory</name>
+										<value>${project.build.directory}/allure-reports</value>
+									</property>
+								</systemProperties>
+							</configuration>
+							<dependencies>
+								<dependency>
+									<groupId>org.aspectj</groupId>
+									<artifactId>aspectjweaver</artifactId>
+									<version>${aspectj.version}</version>
+								</dependency>
+								<dependency>
+									<groupId>org.apache.maven.surefire</groupId>
+									<artifactId>maven-surefire-common</artifactId>
+									<version>${maven-surefire-plugin.version}</version>
+								</dependency>
+							</dependencies>
+						</plugin>
+
+						<plugin>
+							<groupId>io.qameta.allure</groupId>
+							<artifactId>allure-maven</artifactId>
+							<version>${maven-allure-plugin.version}</version>
+							<configuration>
+								<outputDirectory>${project.build.directory}</outputDirectory>
+								<reportingOutputDirectory>${project.build.directory}</reportingOutputDirectory>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+
+				<!-- Use in lifecycle -->
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${maven-surefire-plugin.version}</version>
+					</plugin>
+					<plugin>
+						<groupId>io.qameta.allure</groupId>
+						<artifactId>allure-maven</artifactId>
+						<version>${maven-allure-plugin.version}</version>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<dependencies>
+		<!-- Slf4j dependencies -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Junit5 dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -33,62 +152,56 @@
 			<version>${junit-jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-migrationsupport</artifactId>
-			<version>${junit-jupiter.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.hamcrest</groupId>
-					<artifactId>hamcrest-core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-params</artifactId>
-			<version>${junit-jupiter.version}</version>
-			<scope>test</scope>
-		</dependency>
+		<!--		<dependency>-->
+		<!--			<groupId>org.junit.jupiter</groupId>-->
+		<!--			<artifactId>junit-jupiter-migrationsupport</artifactId>-->
+		<!--			<version>${junit-jupiter.version}</version>-->
+		<!--			<exclusions>-->
+		<!--				<exclusion>-->
+		<!--					<groupId>org.hamcrest</groupId>-->
+		<!--					<artifactId>hamcrest-core</artifactId>-->
+		<!--				</exclusion>-->
+		<!--			</exclusions>-->
+		<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>org.junit.jupiter</groupId>-->
+		<!--			<artifactId>junit-jupiter-params</artifactId>-->
+		<!--			<version>${junit-jupiter.version}</version>-->
+		<!--			<scope>test</scope>-->
+		<!--		</dependency>-->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${junit-jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-launcher</artifactId>
-			<version>${junit-platform.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-runner</artifactId>
-			<version>${junit-platform.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-commons</artifactId>
-			<version>${junit-platform.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-engine</artifactId>
-			<version>${junit-platform.version}</version>
-			<scope>test</scope>
-		</dependency>
+		<!--		<dependency>-->
+		<!--			<groupId>org.junit.platform</groupId>-->
+		<!--			<artifactId>junit-platform-launcher</artifactId>-->
+		<!--			<version>${junit-platform.version}</version>-->
+		<!--			<scope>test</scope>-->
+		<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>org.junit.platform</groupId>-->
+		<!--			<artifactId>junit-platform-runner</artifactId>-->
+		<!--			<version>${junit-platform.version}</version>-->
+		<!--			<scope>test</scope>-->
+		<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>org.junit.platform</groupId>-->
+		<!--			<artifactId>junit-platform-commons</artifactId>-->
+		<!--			<version>${junit-platform.version}</version>-->
+		<!--			<scope>test</scope>-->
+		<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>org.junit.platform</groupId>-->
+		<!--			<artifactId>junit-platform-engine</artifactId>-->
+		<!--			<version>${junit-platform.version}</version>-->
+		<!--			<scope>test</scope>-->
+		<!--		</dependency>-->
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-suite</artifactId>
-			<version>${junit-platform.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-suite-api</artifactId>
 			<version>${junit-platform.version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -118,6 +231,12 @@
 		<!-- Allure dependencies -->
 		<dependency>
 			<groupId>io.qameta.allure</groupId>
+			<artifactId>allure-junit5</artifactId>
+			<version>${allure.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.qameta.allure</groupId>
 			<artifactId>allure-cucumber-jvm</artifactId>
 			<version>${allure.version}</version>
 			<scope>test</scope>
@@ -131,11 +250,23 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Commons dependencies-->
+		<!-- Test Api dependencies-->
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-commons</artifactId>
-			<version>${test-api-commons.version}</version>
+			<version>${test-api.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>tech.arenadata.api.test</groupId>
+			<artifactId>test-api-client</artifactId>
+			<version>${test-api.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>tech.arenadata.api.test</groupId>
+			<artifactId>test-api-extensions</artifactId>
+			<version>${test-api.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
