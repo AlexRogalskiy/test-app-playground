@@ -14,7 +14,7 @@ import java.util.function.Predicate;
  * - item link by value / predicate
  * - item parent id by value / predicate
  */
-class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemTemplate> {
+public class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemTemplate> {
 
 	ItemTemplateAssert(final ItemTemplate template) {
 		super(template, ItemTemplateAssert.class);
@@ -25,7 +25,8 @@ class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemTemplate
 
 		final var id = FieldSupport.EXTRACTION.fieldValue("id", String.class, this.actual);
 		if (!Objects.equals(id, expectedId)) {
-			failWithMessage("expected item template id to be <%s> but was <%s>", expectedId, id);
+			failWithMessage("expected item template id to be <%s> but was <%s>",
+				expectedId, id);
 		}
 		return this;
 	}
@@ -45,7 +46,8 @@ class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemTemplate
 
 		final var label = FieldSupport.EXTRACTION.fieldValue("label", String.class, this.actual);
 		if (!Objects.equals(label, expectedLabel)) {
-			failWithMessage("expected item template label to be <%s> but was <%s>", expectedLabel, label);
+			failWithMessage("expected item template label to be <%s> but was <%s>",
+				expectedLabel, label);
 		}
 		return this;
 	}
@@ -65,7 +67,8 @@ class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemTemplate
 
 		final var link = FieldSupport.EXTRACTION.fieldValue("link", String.class, this.actual);
 		if (!Objects.equals(link, expectedLink)) {
-			failWithMessage("expected item template link to be <%s> but was <%s>", expectedLink, link);
+			failWithMessage("expected item template link to be <%s> but was <%s>",
+				expectedLink, link);
 		}
 		return this;
 	}
@@ -85,7 +88,8 @@ class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemTemplate
 
 		final var parentId = FieldSupport.EXTRACTION.fieldValue("depends", String.class, this.actual);
 		if (!Objects.equals(parentId, expectedParentId)) {
-			failWithMessage("expected item template parent id to be <%s> but was <%s>", expectedParentId, parentId);
+			failWithMessage("expected item template parent id to be <%s> but was <%s>",
+				expectedParentId, parentId);
 		}
 		return this;
 	}

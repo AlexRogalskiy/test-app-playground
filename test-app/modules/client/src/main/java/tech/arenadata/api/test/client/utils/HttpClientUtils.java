@@ -5,6 +5,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
@@ -19,6 +20,14 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 @UtilityClass
 public class HttpClientUtils {
+
+	/**
+	 * Default supported content types
+	 */
+	public static final ContentType APPLICATION_YAML = ContentType.create(
+		"application/x-yaml", UTF_8);
+	public static final ContentType APPLICATION_HTML = ContentType.create(
+		"text/html", UTF_8);
 
 	/**
 	 * Default http headers

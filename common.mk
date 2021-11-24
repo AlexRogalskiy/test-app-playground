@@ -41,9 +41,6 @@ endif
 # Make sure that all required utilities can be located.
 UTIL_CHECK := $(or $(shell which $(UTILS) >/dev/null && echo 'ok'),$(error Did you forget to install [$(UTILS)] after cloning the repo? At least one of the required supporting utilities not found: $(UTILS)))
 
-# Since we rely on paths relative to the makefile location, abort if make isn't being run from there.
-$(if $(findstring /,$(MAKEFILE_LIST)),$(error Please only invoke this makefile from the directory it resides in))
-
 ############################################################################
 # Common targets
 ############################################################################

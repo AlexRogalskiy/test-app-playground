@@ -40,7 +40,7 @@ public class JsonParser {
 
 	public String getField(final String jsonString, final String fieldName) {
 		try {
-			return this.mapper.readTree(jsonString).findPath(fieldName).asToken().asString();
+			return this.mapper.readTree(jsonString).findPath(fieldName).asText();
 		} catch (JsonProcessingException ex) {
 			log.error("Cannot process input value={} by field name={}", jsonString, fieldName, ex);
 			throw createJsonParseError(ex);

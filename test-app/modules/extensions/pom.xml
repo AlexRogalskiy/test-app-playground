@@ -19,7 +19,7 @@
 
 	<properties>
 		<!-- versions -->
-		<test-api-commons.version>1.0.0</test-api-commons.version>
+		<test-api.version>1.0.0</test-api.version>
 	</properties>
 
 	<dependencies>
@@ -34,7 +34,7 @@
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-commons</artifactId>
-			<version>${test-api-commons.version}</version>
+			<version>${test-api.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -67,7 +67,7 @@
 						<annotationProcessorPath>
 							<groupId>tech.arenadata.api.test</groupId>
 							<artifactId>test-api-commons</artifactId>
-							<version>${test-api-commons.version}</version>
+							<version>${test-api.version}</version>
 						</annotationProcessorPath>
 					</annotationProcessorPaths>
 				</configuration>

@@ -21,7 +21,7 @@ import static org.apache.commons.lang3.StringUtils.join;
  * - has no items
  * - has all unique by predicate
  */
-class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageTemplate> {
+public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageTemplate> {
 
 	PageTemplateAssert(final PageTemplate template) {
 		super(template, PageTemplateAssert.class);
@@ -32,7 +32,8 @@ class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageTemplate
 
 		final var items = this.actual.getItems();
 		if (!items.containsAll(Arrays.asList(itemTemplates))) {
-			failWithMessage("expected page template should contains <%s> but was <%s>", join(itemTemplates), join(items));
+			failWithMessage("expected page template should contains <%s> but was <%s>",
+				join(itemTemplates), join(items));
 		}
 		return this;
 	}
@@ -72,7 +73,8 @@ class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageTemplate
 
 		final var items = this.actual.getItems();
 		if (items.isEmpty()) {
-			failWithMessage("expected page template should contain items but was <%s>", join(items));
+			failWithMessage("expected page template should contain items but was <%s>",
+				join(items));
 		}
 		return this;
 	}
@@ -82,7 +84,8 @@ class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageTemplate
 
 		final var items = this.actual.getItems();
 		if (!items.isEmpty()) {
-			failWithMessage("expected page template should contain no items but was <%s>", join(items));
+			failWithMessage("expected page template should contain no items but was <%s>",
+				join(items));
 		}
 		return this;
 	}

@@ -19,7 +19,7 @@
 
 	<properties>
 		<!-- versions -->
-		<test-api-commons.version>1.0.0</test-api-commons.version>
+		<test-api.version>1.0.0</test-api.version>
 	</properties>
 
 	<dependencyManagement>
@@ -28,27 +28,27 @@
 			<dependency>
 				<groupId>tech.arenadata.api.test</groupId>
 				<artifactId>test-api-assertions</artifactId>
-				<version>${test-api-commons.version}</version>
+				<version>${test-api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>tech.arenadata.api.test</groupId>
 				<artifactId>test-api-client</artifactId>
-				<version>${test-api-commons.version}</version>
+				<version>${test-api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>tech.arenadata.api.test</groupId>
 				<artifactId>test-api-commons</artifactId>
-				<version>${test-api-commons.version}</version>
+				<version>${test-api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>tech.arenadata.api.test</groupId>
 				<artifactId>test-api-extensions</artifactId>
-				<version>${test-api-commons.version}</version>
+				<version>${test-api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>tech.arenadata.api.test</groupId>
 				<artifactId>test-api-it</artifactId>
-				<version>${test-api-commons.version}</version>
+				<version>${test-api.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

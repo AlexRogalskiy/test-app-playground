@@ -134,6 +134,41 @@
 				</plugins>
 			</build>
 		</profile>
+
+		<!-- Uber jar profile -->
+		<profile>
+			<id>uber</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>${maven-assembly-plugin.version}</version>
+						<configuration>
+							<descriptors>
+								<descriptor>src/assembly/descriptor.xml</descriptor>
+							</descriptors>
+							<archive>
+								<manifest>
+									<mainClass>
+										tech.arenadata.api.test.it.TestRunner
+									</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+						<executions>
+							<execution>
+								<id>single</id>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<phase>package</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<dependencies>
@@ -142,6 +177,13 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- HttpCore dependencies-->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.5.13</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -209,14 +251,16 @@
 		<!-- Cucumber dependencies -->
 		<dependency>
 			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-junit-platform-engine</artifactId>
-			<version>${cucumber.version}</version>
-			<scope>test</scope>
+			<artifactId>cucumber-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-java</artifactId>
-			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit-platform-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
 
@@ -254,6 +298,12 @@
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-commons</artifactId>
+			<version>${test-api.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>tech.arenadata.api.test</groupId>
+			<artifactId>test-api-assertions</artifactId>
 			<version>${test-api.version}</version>
 			<scope>test</scope>
 		</dependency>

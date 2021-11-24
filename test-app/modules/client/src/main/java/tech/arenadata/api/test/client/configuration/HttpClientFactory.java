@@ -43,26 +43,26 @@ public final class HttpClientFactory {
 	/**
 	 * Returns {@link HttpClient} instance.
 	 *
-	 * @param configuration initial input {@link HttpClientConfiguration} to operate by
+	 * @param configurer initial input {@link HttpClientConfigurer} to operate by
 	 * @return http client
 	 */
-	public HttpClient createHttpClient(final HttpClientConfiguration configuration) {
+	public CloseableHttpClient createHttpClient(final HttpClientConfigurer configurer) {
 		return HttpClientBuilder.create()
-			.setDefaultRequestConfig(configuration.getRequestConfig())
-			.setDefaultSocketConfig(configuration.getSocketConfig())
+			.setDefaultRequestConfig(configurer.createRequestConfig())
+			.setDefaultSocketConfig(configurer.createSocketConfig())
 			.build();
 	}
 
 	/**
 	 * Returns secure {@link HttpClient} instance.
 	 *
-	 * @param configuration initial input {@link HttpClientConfiguration} to operate by
+	 * @param configurer initial input {@link HttpClientConfigurer} to operate by
 	 * @return https client
 	 * @throws KeyStoreException        key store exception
 	 * @throws NoSuchAlgorithmException no such algorithm exception
 	 * @throws KeyManagementException   key management exception
 	 */
-	public CloseableHttpClient createHttpsClient(final HttpClientConfiguration configuration)
+	public CloseableHttpClient createHttpsClient(final HttpClientConfigurer configurer)
 		throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
 		final var sslContext = new SSLContextBuilder()
 			.loadTrustMaterial(null, (certificate, authType) -> true)
@@ -71,7 +71,7 @@ public final class HttpClientFactory {
 		return resolveProxySetting(HttpClients.custom())
 			.setSSLContext(sslContext)
 			.setSSLHostnameVerifier(new NoopHostnameVerifier())
-			.setDefaultRequestConfig(configuration.getRequestConfig())
+			.setDefaultRequestConfig(configurer.createRequestConfig())
 			.build();
 	}
 

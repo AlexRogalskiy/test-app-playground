@@ -13,6 +13,10 @@ import tech.arenadata.api.test.commons.interfaces.ErrorTemplate;
 @RequiredArgsConstructor
 public enum GeneralErrorTemplateType implements ErrorTemplate {
 	/**
+	 * Unsupported configuration scheme
+	 */
+	CONFIGURATION_SCHEME_ERROR("error.configuration.app.scheme.invalid"),
+	/**
 	 * Unsupported configuration host
 	 */
 	CONFIGURATION_HOST_ERROR("error.configuration.app.host.invalid"),

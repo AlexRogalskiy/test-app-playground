@@ -16,7 +16,7 @@ public class ConfigurationException extends RuntimeException {
 	/**
 	 * {@link ConfigurationException} constructor with initial input message
 	 *
-	 * @param message - initial input message {@link String}
+	 * @param message initial input message {@link String}
 	 */
 	public ConfigurationException(final String message) {
 		super(message);
@@ -25,7 +25,7 @@ public class ConfigurationException extends RuntimeException {
 	/**
 	 * {@link ConfigurationException} constructor with initial input {@link Throwable}
 	 *
-	 * @param cause - initial input cause target {@link Throwable}
+	 * @param cause initial input cause target {@link Throwable}
 	 */
 	public ConfigurationException(final Throwable cause) {
 		super(cause);
@@ -35,8 +35,8 @@ public class ConfigurationException extends RuntimeException {
 	 * {@link ConfigurationException} constructor with initial input message and {@link
 	 * Throwable}
 	 *
-	 * @param message - initial input message {@link String}
-	 * @param cause   - initial input cause target {@link Throwable}
+	 * @param message initial input message {@link String}
+	 * @param cause   initial input cause target {@link Throwable}
 	 */
 	public ConfigurationException(final String message, final Throwable cause) {
 		super(message, cause);
@@ -45,7 +45,7 @@ public class ConfigurationException extends RuntimeException {
 	/**
 	 * Returns {@link ConfigurationException} by input parameters
 	 *
-	 * @param message - initial input description {@link String}
+	 * @param message initial input description {@link String}
 	 * @return {@link ConfigurationException}
 	 */
 	@NonNull
@@ -54,9 +54,20 @@ public class ConfigurationException extends RuntimeException {
 	}
 
 	/**
+	 * Returns scheme {@link ConfigurationException} by input parameters
+	 *
+	 * @param args initial input message arguments {@link Object}
+	 * @return host {@link ConfigurationException}
+	 */
+	@NonNull
+	public static ConfigurationException createSchemeError(final Object... args) {
+		return createError(CONFIGURATION_SCHEME_ERROR.getLocalizedMessage(args));
+	}
+
+	/**
 	 * Returns host {@link ConfigurationException} by input parameters
 	 *
-	 * @param args - initial input message arguments {@link Object}
+	 * @param args initial input message arguments {@link Object}
 	 * @return host {@link ConfigurationException}
 	 */
 	@NonNull
@@ -67,7 +78,7 @@ public class ConfigurationException extends RuntimeException {
 	/**
 	 * Returns port {@link ConfigurationException} by input parameters
 	 *
-	 * @param args - initial input message arguments {@link Object}
+	 * @param args initial input message arguments {@link Object}
 	 * @return port {@link ConfigurationException}
 	 */
 	@NonNull
@@ -78,7 +89,7 @@ public class ConfigurationException extends RuntimeException {
 	/**
 	 * Returns path {@link ConfigurationException} by input parameters
 	 *
-	 * @param args - initial input message arguments {@link Object}
+	 * @param args initial input message arguments {@link Object}
 	 * @return path {@link ConfigurationException}
 	 */
 	@NonNull
@@ -89,7 +100,7 @@ public class ConfigurationException extends RuntimeException {
 	/**
 	 * Returns messages basename {@link ConfigurationException} by input parameters
 	 *
-	 * @param args - initial input message arguments {@link Object}
+	 * @param args initial input message arguments {@link Object}
 	 * @return port {@link ConfigurationException}
 	 */
 	@NonNull

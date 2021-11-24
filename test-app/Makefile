@@ -14,7 +14,7 @@ MVN_CMD := $(shell command -v ./mvnw || command -v mvn)
 # DOCKER_CMD stores docker command
 DOCKER_CMD := $(shell command -v docker)
 # MAVEN_ARGS stores default maven arguments
-MAVEN_ARGS := --file $(ROOT_DIR)/test-app/pom.xml --show-version --batch-mode --errors --lax-checksums -Dinvoker.skip=true -Dmaven.exec.skip=true -Dmaven.install.skip -Dmaven.resources.skip -Dmaven.test.skip=true
+MAVEN_ARGS := --file pom.xml --show-version --batch-mode --errors --lax-checksums -Dinvoker.skip=true -Dmaven.exec.skip=true -Dmaven.install.skip -Dmaven.resources.skip -Dmaven.test.skip=true
 
 # Run all by default when "make" is invoked.
 .DEFAULT_GOAL := help

@@ -29,6 +29,7 @@ public class ServiceUtils {
 	/**
 	 * Returns parsed {@link Optional} {@link String} value
 	 *
+	 * @param value initial input {@link String} property value
 	 * @return {@link Optional} {@link String} value
 	 */
 	public static Optional<String> getPropertyValueAsString(final String value) {
@@ -38,6 +39,7 @@ public class ServiceUtils {
 	/**
 	 * Returns parsed {@link Optional} {@link Long} value
 	 *
+	 * @param value initial input {@link String} property value
 	 * @return {@link Optional} {@link Long} value
 	 */
 	public static Optional<Long> getPropertyValueAsLong(final String value) {
@@ -47,6 +49,7 @@ public class ServiceUtils {
 	/**
 	 * Returns parsed {@link Optional} {@link Integer} value
 	 *
+	 * @param value initial input {@link String} property value
 	 * @return {@link Optional} {@link Integer} value
 	 */
 	public static Optional<Integer> getPropertyValueAsInt(final String value) {
@@ -56,9 +59,9 @@ public class ServiceUtils {
 	/**
 	 * Returns {@link Optional} of computed input {@link String} property value by {@link Function} validator
 	 *
+	 * @param <T>       type of computed value
 	 * @param value     initial input {@link String} property value to compute
 	 * @param validator initial input {@link Function} validator
-	 * @param <T>       type of computed value
 	 * @return computed {@link T} property value
 	 */
 	private static <T> Optional<T> getPropertyValue(final String value,

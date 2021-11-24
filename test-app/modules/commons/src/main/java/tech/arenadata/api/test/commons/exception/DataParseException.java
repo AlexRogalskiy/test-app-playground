@@ -16,7 +16,7 @@ public class DataParseException extends RuntimeException {
 	/**
 	 * {@link DataParseException} constructor with initial input message
 	 *
-	 * @param message - initial input message {@link String}
+	 * @param message initial input message {@link String}
 	 */
 	public DataParseException(final String message) {
 		super(message);
@@ -25,7 +25,7 @@ public class DataParseException extends RuntimeException {
 	/**
 	 * {@link DataParseException} constructor with initial input {@link Throwable}
 	 *
-	 * @param cause - initial input cause target {@link Throwable}
+	 * @param cause initial input cause target {@link Throwable}
 	 */
 	public DataParseException(final Throwable cause) {
 		super(cause);
@@ -35,8 +35,8 @@ public class DataParseException extends RuntimeException {
 	 * {@link DataParseException} constructor with initial input message and {@link
 	 * Throwable}
 	 *
-	 * @param message - initial input message {@link String}
-	 * @param cause   - initial input cause target {@link Throwable}
+	 * @param message initial input message {@link String}
+	 * @param cause   initial input cause target {@link Throwable}
 	 */
 	public DataParseException(final String message, final Throwable cause) {
 		super(message, cause);
@@ -45,7 +45,7 @@ public class DataParseException extends RuntimeException {
 	/**
 	 * Returns {@link DataParseException} by input parameters
 	 *
-	 * @param message - initial input description {@link String}
+	 * @param message initial input description {@link String}
 	 * @return {@link DataParseException}
 	 */
 	@NonNull
@@ -56,7 +56,7 @@ public class DataParseException extends RuntimeException {
 	/**
 	 * Returns json {@link DataParseException} by input parameters
 	 *
-	 * @param args - initial input message arguments {@link Object}
+	 * @param args initial input message arguments {@link Object}
 	 * @return host {@link DataParseException}
 	 */
 	@NonNull

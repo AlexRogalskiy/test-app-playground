@@ -56,6 +56,6 @@ public class ConfigurationUtils {
 
 	private static String getConfigurationDir() {
 		return Optional.ofNullable(System.getenv("CONFIG_DIR"))
-			.orElse(".");
+			.orElse("src/test/resources");
 	}
 }

@@ -11,7 +11,9 @@ public interface ErrorTemplate {
 	/**
 	 * Returns {@link E} error template by input {@link String} message code
 	 *
-	 * @param messageCode - initial input {@link String} message code
+	 * @param <E>         type of enumeration
+	 * @param values      initial input {@link E} collection of values
+	 * @param messageCode initial input {@link String} message code
 	 * @return {@link E} error template
 	 */
 	static <E extends ErrorTemplate> E findByCode(
@@ -25,7 +27,9 @@ public interface ErrorTemplate {
 	/**
 	 * Returns {@link E} error template by input {@link String} message key
 	 *
-	 * @param messageKey - initial input {@link String} message key
+	 * @param <E>         type of enumeration
+	 * @param values      initial input {@link E} collection of values
+	 * @param messageKey initial input {@link String} message key
 	 * @return {@link E} error template
 	 */
 	static <E extends ErrorTemplate> E findByKey(

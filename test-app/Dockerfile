@@ -3,26 +3,50 @@ FROM maven:3.8.1-openjdk-11-slim AS build
 ## setup image arguments
 ARG APP_DIR="/home/app"
 
-## copy source files
-COPY .. "$APP_DIR"
-
 ## setup working directory
 WORKDIR "$APP_DIR"
 
+## create project structure
+RUN mkdir -p ./modules/assertions \
+    && mkdir -p ./modules/bom \
+    && mkdir -p ./modules/client \
+    && mkdir -p ./modules/commons \
+    && mkdir -p ./modules/extension \
+    && mkdir -p ./modules/it
+
+## copy source files
+COPY pom.xml ./ \
+     modules/assertions/pom.xml  ./modules/assertions/ \
+     modules/bom/pom.xml  ./modules/bom/ \
+     modules/client/pom.xml  ./modules/client/ \
+     modules/commons/pom.xml  ./modules/commons/ \
+     modules/extensions/pom.xml  ./modules/extensions/ \
+     modules/it/pom.xml  ./modules/it/
+
 ## build dependencies
-RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean package -Dmaven.test.skip=true
+RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean verify --fail-never dependency:copy-dependencies dependency:resolve-plugins dependency:go-offline
+
+## copy source files
+COPY modules/assertions/src  ./modules/assertions/src/ \
+     modules/client/src  ./modules/client/src/ \
+     modules/commons/src  ./modules/commons/src/ \
+     modules/extensions/src  ./modules/extensions/src/ \
+     modules/it/src  ./modules/it/src/
+
+## build project
+RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean package
 
 FROM openjdk:11-slim
 
 ## setup image arguments
 ARG IMAGE_NAME="test-app-playground"
-ARG IMAGE_DESCRIPTION="Arenadata Test Application playground"
+ARG IMAGE_DESCRIPTION="Arenadata Test Application Playground"
 ARG IMAGE_URL="https://github.com/AlexRogalskiy/test-app-playground"
 ARG IMAGE_REVISION="$(git rev-parse HEAD)"
 ARG IMAGE_VERSION="$(git describe --abbrev=0 --tag)"
 ARG IMAGE_BUILD_DATE="$(date -u +\"%Y-%m-%dT%H:%M:%SZ\")"
 
-ARG JAR_FILE="*.jar"
+ARG JAR_FILE="*uber.jar"
 ARG APP_DIR="/home/app"
 ARG LIB_DIR="/usr/local/lib"
 ARG BUILD_DIR=".build/bin/tech.arenadata.api.test.it"
@@ -49,9 +73,6 @@ COPY --from=build --chown=1001 "$APP_DIR/$BUILD_DIR/$JAR_FILE" "$LIB_DIR/app.jar
 
 ## setup working directory
 WORKDIR "$LIB_DIR"
-
-## expose port
-EXPOSE 8080
 
 ## setup entrypoint
 ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS $JAVA_VM_OPTS -jar app.jar" ]

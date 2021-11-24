@@ -10,15 +10,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ConfigPropertyType {
 	/**
-	 * Application host
+	 * Server scheme
+	 */
+	CONFIG_APP_SCHEME("config.app.scheme"),
+	/**
+	 * Server host
 	 */
 	CONFIG_APP_HOST("config.app.host"),
 	/**
-	 * Application path
+	 * Server path
 	 */
 	CONFIG_APP_PATH("config.app.path"),
 	/**
-	 * Application port
+	 * Server port
 	 */
 	CONFIG_APP_PORT("config.app.port"),
 	/**

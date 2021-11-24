@@ -39,6 +39,17 @@ public final class ConfigurationFactory {
 	}
 
 	/**
+	 * Returns {@link String} server scheme.
+	 *
+	 * @return server scheme
+	 */
+	public String getServerScheme() {
+		final var property = getProperty(CONFIG_APP_SCHEME);
+		return getPropertyValueAsString(property)
+			.orElseThrow(() -> createSchemeError(property));
+	}
+
+	/**
 	 * Returns {@link String} server host.
 	 *
 	 * @return server host
@@ -46,7 +57,6 @@ public final class ConfigurationFactory {
 	public String getServerHost() {
 		final var property = getProperty(CONFIG_APP_HOST);
 		return getPropertyValueAsString(property)
-			.map(value -> !value.startsWith("/") ? "/" + value : value)
 			.orElseThrow(() -> createHostError(property));
 	}
 

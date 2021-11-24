@@ -3,16 +3,19 @@ package tech.arenadata.api.test.assertions.general;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
+import org.apache.http.util.EntityUtils;
 import org.assertj.core.api.AbstractAssert;
 import tech.arenadata.api.test.commons.helper.JsonParser;
 
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.join;
 
 /**
@@ -27,7 +30,7 @@ import static org.apache.commons.lang3.StringUtils.join;
  * - response field / fields
  */
 @Slf4j
-class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse> {
+public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse> {
 
 	private final String content;
 	private final JsonParser jsonParser;
@@ -43,7 +46,8 @@ class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse
 
 		final var statusCode = this.actual.getStatusLine().getStatusCode();
 		if (statusCode != expectedStatusCode) {
-			failWithMessage("expected response status code to be <%s> but was <%s>", expectedStatusCode, statusCode);
+			failWithMessage("expected response status code to be <%s> but was <%s>",
+				expectedStatusCode, statusCode);
 		}
 		return this;
 	}
@@ -52,8 +56,9 @@ class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse
 		this.isNotNull();
 
 		final var reasonPhrase = this.actual.getStatusLine().getReasonPhrase();
-		if (!Objects.equals(reasonPhrase, expectedReasonPhrase)) {
-			failWithMessage("expected response reason phrase to be <%s> but was <%s>", expectedReasonPhrase, reasonPhrase);
+		if (!equalsIgnoreCase(reasonPhrase, expectedReasonPhrase)) {
+			failWithMessage("expected response reason phrase to be <%s> but was <%s>",
+				expectedReasonPhrase, reasonPhrase);
 		}
 		return this;
 	}
@@ -63,7 +68,8 @@ class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse
 
 		final var protocolVersion = this.actual.getStatusLine().getProtocolVersion();
 		if (!Objects.equals(protocolVersion, expectedProtocolVersion)) {
-			failWithMessage("expected response protocol version to be <%s> but was <%s>", expectedProtocolVersion, protocolVersion);
+			failWithMessage("expected response protocol version to be <%s> but was <%s>",
+				expectedProtocolVersion, protocolVersion);
 		}
 		return this;
 	}
@@ -72,7 +78,23 @@ class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse
 		this.isNotNull();
 
 		if (!this.actual.containsHeader(expectedHeader)) {
-			failWithMessage("expected response header to be <%s> but was <%s>", expectedHeader, join(this.actual.getAllHeaders()));
+			failWithMessage("expected response header to be <%s> but was <%s>",
+				expectedHeader, join(this.actual.getAllHeaders()));
+		}
+		return this;
+	}
+
+	public HttpResponseAssert hasHeader(final Header expectedHeader) {
+		return this.hasHeader(expectedHeader.getName(), expectedHeader.getValue());
+	}
+
+	public HttpResponseAssert hasHeader(final String expectedHeaderName, final String expectedHeaderValue) {
+		this.isNotNull();
+
+		final var header = this.actual.getFirstHeader(expectedHeaderName);
+		if (!equalsIgnoreCase(header.getValue(), expectedHeaderValue)) {
+			failWithMessage("expected response header to be <%s>: <%s> but was <%s>: <%s>",
+				expectedHeaderName, expectedHeaderValue, header.getName(), header.getValue());
 		}
 		return this;
 	}
@@ -86,8 +108,9 @@ class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse
 	public HttpResponseAssert hasContent(final String expectedContent) {
 		this.isNotNull();
 
-		if (!Objects.equals(this.content, expectedContent)) {
-			failWithMessage("expected response content to be <%s> but was <%s>", expectedContent, content);
+		if (!equalsIgnoreCase(this.content, expectedContent)) {
+			failWithMessage("expected response content to be <%s> but was <%s>",
+				expectedContent, this.content);
 		}
 		return this;
 	}
@@ -97,7 +120,8 @@ class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse
 
 		final var contentLength = this.actual.getEntity().getContentLength();
 		if (contentLength != expectedContentLength) {
-			failWithMessage("expected response content length to be <%s> but was <%s>", expectedContentLength, contentLength);
+			failWithMessage("expected response content length to be <%s> but was <%s>",
+				expectedContentLength, contentLength);
 		}
 		return this;
 	}
@@ -107,8 +131,9 @@ class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse
 		this.isNotNull();
 
 		final var fieldValue = this.jsonParser.getField(this.content, expectedFieldName);
-		if (!Objects.equals(fieldValue, expectedFieldValue)) {
-			failWithMessage("expected response content field value to be <%s> but was <%s>", expectedFieldValue, fieldValue);
+		if (!equalsIgnoreCase(fieldValue, expectedFieldValue)) {
+			failWithMessage("expected response content field value to be <%s> but was <%s>",
+				expectedFieldValue, fieldValue);
 		}
 		return this;
 	}
@@ -124,7 +149,8 @@ class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse
 
 		final var fieldNameExists = this.jsonParser.hasField(this.content, expectedFieldName);
 		if (!fieldNameExists) {
-			failWithMessage("expected response content field name to be <%s> but was none", expectedFieldName);
+			failWithMessage("expected response content field name to be <%s> but was none",
+				expectedFieldName);
 		}
 		return this;
 	}
@@ -155,8 +181,8 @@ class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpResponse
 	}
 
 	private String extractContent(final HttpResponse response) {
-		try (final var stream = response.getEntity().getContent()) {
-			return IOUtils.toString(stream);
+		try {
+			return EntityUtils.toString(response.getEntity(), UTF_8);
 		} catch (Exception ex) {
 			log.error("Cannot extract content from response", ex);
 		}
