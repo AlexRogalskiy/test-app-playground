@@ -33,7 +33,7 @@
 		<project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
 
 		<!-- dependencies -->
-		<slf4j.version>2.0.0-alpha4</slf4j.version>
+		<slf4j.version>2.0.0-alpha5</slf4j.version>
 		<lombok.version>1.18.22</lombok.version>
 		<google-error-prone.version>2.10.0</google-error-prone.version>
 		<jackson.version>2.13.0</jackson.version>
