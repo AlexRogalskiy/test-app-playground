@@ -3,17 +3,17 @@ package tech.arenadata.api.test.it.steps;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.ContentType;
 import tech.arenadata.api.test.assertions.general.Assertions;
 
 import java.io.IOException;
 
 import static java.lang.String.format;
+import static org.apache.http.HttpHeaders.ACCEPT;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
+import static org.apache.http.HttpStatus.SC_NOT_FOUND;
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 
 /**
@@ -32,24 +32,24 @@ public class PageStepDeleteDefinitions extends BasePageStepDefinitions {
 	@When("^users delete information on the uploaded page template$")
 	public void usersDeleteInformationOnPageTemplate() {
 		this.request = new HttpDelete(this.url);
-		this.request.addHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.toString());
+		this.request.addHeader(ACCEPT, APPLICATION_JSON.toString());
 	}
 
 	@Then("the page template {string} is deleted")
-	public void theRequestedPageTemplateIsDeleted(final String templateId) throws IOException {
+	public void theServerShouldReturnASuccessStatus(final String templateId) throws IOException {
 		try (final var response = this.getHttpClient().execute(this.request)) {
 			Assertions.assertThat(response)
-				.hasStatusCode(HttpStatus.SC_OK)
+				.hasStatusCode(SC_OK)
 				.hasHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 				.hasFieldValue("message", format("Template with tmpl_id=%s successfully deleted!", templateId));
 		}
 	}
 
-	@Then("delete operation should fail with status \\({int}) for page template {string}")
-	public void theServerShouldReturnAFailStatus(final int status, final String templateId) throws IOException {
+	@Then("delete operation should fail with page template {string} not found")
+	public void theServerShouldReturnANotFoundStatus(final String templateId) throws IOException {
 		try (final var response = this.getHttpClient().execute(this.request)) {
 			Assertions.assertThat(response)
-				.hasStatusCode(status)
+				.hasStatusCode(SC_NOT_FOUND)
 				.hasHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
 				.hasFieldValue("message", format("No template with tmpl_id=%s found!", templateId));
 		}

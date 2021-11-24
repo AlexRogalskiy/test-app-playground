@@ -1,5 +1,5 @@
 @rest-api-issues
-Feature: REST API issues with page template upload/fetch/delete/install operations
+Feature: REST API common issues with page template upload/fetch/delete/install operations
   Users should be able to send POST, GET, DELETE requests to a web service to upload/fetch/delete/install page templates
 
 #  Scenario: Page template with empty id uploaded to a web service

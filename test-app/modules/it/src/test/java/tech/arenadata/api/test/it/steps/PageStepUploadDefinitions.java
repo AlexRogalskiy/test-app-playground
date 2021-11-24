@@ -61,7 +61,6 @@ public class PageStepUploadDefinitions extends BasePageStepDefinitions {
 			.addPart("file", new FileBody(new File(this.fileName), APPLICATION_YAML))
 			.addPart("data", new StringBody(format("{\"tmpl_id\":\"%s\"}", templateId), APPLICATION_JSON))
 			.build();
-		//this.request.addHeader("Content-Type", "multipart/form-data");
 		this.request.setEntity(entity);
 	}
 

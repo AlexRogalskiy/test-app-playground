@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import static java.lang.String.format;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
+import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 
 /**
@@ -31,23 +32,33 @@ public class PageStepInstallDefinitions extends BasePageStepDefinitions {
 		this.request = new HttpPost(this.url);
 	}
 
-	@Then("the server should return a success status \\(int) with the installed page template data {string}")
+	@Then("install operation should succeed with status \\({int}) for page template {string}")
 	public void theInstalledPageTemplateDataIsReturned(final int status, final String templateId) throws IOException {
 		try (final var response = this.getHttpClient().execute(this.request)) {
 			Assertions.assertThat(response)
 				.hasStatusCode(status)
 				.hasHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-				.hasContent(templateId);
+				.hasFieldValue("message", format("Template with tmpl_id=%s successfully installed!", templateId));
 		}
 	}
 
-	@Then("install operation should fail with status \\({int}) for page template {string}")
-	public void theServerShouldReturnAFailStatus(final int status, final String templateId) throws IOException {
+	@Then("install operation should fail with page template {string} not found")
+	public void theServerShouldReturnANotFoundStatus(final String templateId) throws IOException {
+		try (final var response = this.getHttpClient().execute(this.request)) {
+			Assertions.assertThat(response)
+				.hasStatusCode(SC_NOT_FOUND)
+				.hasHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
+				.hasFieldValue("message", format("No template with tmpl_id=%s found!", templateId));
+		}
+	}
+
+	@Then("install operation should fail with status \\({int}) and message {string}")
+	public void theServerShouldReturnAFailStatus(final int status, final String message) throws IOException {
 		try (final var response = this.getHttpClient().execute(this.request)) {
 			Assertions.assertThat(response)
 				.hasStatusCode(status)
 				.hasHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-				.hasFieldValue("message", format("No template with tmpl_id=%s found!", templateId));
+				.hasFieldValue("message", message);
 		}
 	}
 }
