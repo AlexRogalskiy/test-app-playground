@@ -6,6 +6,7 @@ import io.cucumber.java.en.When;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 import tech.arenadata.api.test.assertions.factory.Assertions;
+import tech.arenadata.api.test.commons.factory.ConfigurationFactory;
 
 import java.io.IOException;
 
@@ -38,12 +39,13 @@ public class PageStepFetchDefinitions extends BasePageStepDefinitions {
 
 	@Then("page templates data {string} should be successfully returned")
 	public void theServerShouldReturnASuccessStatus(final String fileName) throws IOException {
+		final var basedir = ConfigurationFactory.getInstance().getTemplatesDir();
 		try (final var response = this.getHttpClient().execute(this.request)) {
 			Assertions.assertThat(response)
 				.withRepresentation(DEFAULT_REPRESENTATION)
 				.hasStatusCode(SC_OK)
 				.hasHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-				.hasContent(resourceToString("templates", "response", fileName));
+				.hasContent(resourceToString(basedir, "response", fileName));
 		}
 	}
 

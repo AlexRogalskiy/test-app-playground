@@ -98,6 +98,17 @@ public class ConfigurationException extends RuntimeException {
 	}
 
 	/**
+	 * Returns templates {@link ConfigurationException} by input parameters
+	 *
+	 * @param args initial input message arguments {@link Object}
+	 * @return path {@link ConfigurationException}
+	 */
+	@NonNull
+	public static ConfigurationException createTemplatesError(final Object... args) {
+		return createError(CONFIGURATION_TEMPLATES_DIR_ERROR.getLocalizedMessage(args));
+	}
+
+	/**
 	 * Returns messages basename {@link ConfigurationException} by input parameters
 	 *
 	 * @param args initial input message arguments {@link Object}

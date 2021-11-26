@@ -33,6 +33,10 @@ public enum GeneralErrorTemplateType implements ErrorTemplate {
 	 */
 	CONFIGURATION_MESSAGES_BASENAME_ERROR("error.configuration.messages.basename.invalid"),
 	/**
+	 * Unsupported templates basedir
+	 */
+	CONFIGURATION_TEMPLATES_DIR_ERROR("error.configuration.templates.basedir.invalid"),
+	/**
 	 * Invalid json parse exception
 	 */
 	DATA_JSON_PARSE_ERROR("error.data.json.parse.invalid"),

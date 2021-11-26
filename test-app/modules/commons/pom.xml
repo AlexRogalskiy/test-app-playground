@@ -47,19 +47,6 @@
 			<version>${assertj.version}</version>
 		</dependency>
 
-		<!--		&lt;!&ndash; HttpCore dependencies &ndash;&gt;-->
-		<!--		<dependency>-->
-		<!--			<groupId>org.apache.httpcomponents</groupId>-->
-		<!--			<artifactId>httpcore</artifactId>-->
-		<!--			<version>${httpcore.version}</version>-->
-		<!--			<exclusions>-->
-		<!--				<exclusion>-->
-		<!--					<artifactId>commons-logging</artifactId>-->
-		<!--					<groupId>commons-logging</groupId>-->
-		<!--				</exclusion>-->
-		<!--			</exclusions>-->
-		<!--		</dependency>-->
-
 		<!-- Jackson dependencies -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>

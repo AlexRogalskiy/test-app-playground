@@ -6,6 +6,7 @@ import io.cucumber.java.en.When;
 import tech.arenadata.api.test.assertions.factory.Assertions;
 import tech.arenadata.api.test.assertions.model.ItemTemplate;
 import tech.arenadata.api.test.assertions.model.WebPageTemplate;
+import tech.arenadata.api.test.commons.factory.ConfigurationFactory;
 
 import java.io.IOException;
 
@@ -23,7 +24,8 @@ public class PageStepViewDefinitions extends BasePageStepDefinitions {
 
 	@Given("users want to view installed template {string} on a web page")
 	public void usersPrepareRequestData(final String fileName) throws IOException {
-		final var data = resourceToString("templates", "request", fileName);
+		final var basedir = ConfigurationFactory.getInstance().getTemplatesDir();
+		final var data = resourceToString(basedir, "request", fileName);
 		this.items = Assertions.assertThat(data)
 			.isNotBlank()
 			.asPOJO(ItemTemplate[].class);

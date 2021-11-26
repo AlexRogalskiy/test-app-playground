@@ -10,6 +10,7 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import tech.arenadata.api.test.assertions.factory.Assertions;
+import tech.arenadata.api.test.commons.factory.ConfigurationFactory;
 
 import java.io.IOException;
 
@@ -44,7 +45,8 @@ public class PageStepUploadDefinitions extends BasePageStepDefinitions {
 
 	@And("users provide page template file {string}")
 	public void usersProvidePageTemplateFile(final String fileName) {
-		this.builder.addPart("file", new FileBody(resourceToFile("templates", "request", fileName), APPLICATION_YAML));
+		final var basedir = ConfigurationFactory.getInstance().getTemplatesDir();
+		this.builder.addPart("file", new FileBody(resourceToFile(basedir, "request", fileName), APPLICATION_YAML));
 	}
 
 	@And("users provide page template id {string}")

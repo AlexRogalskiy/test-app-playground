@@ -40,7 +40,11 @@ public enum ConfigPropertyType {
 	/**
 	 * Client connection request timeout
 	 */
-	CONFIG_CLIENT_SOCKET_TIMEOUT("config.client.socket.timeout");
+	CONFIG_CLIENT_SOCKET_TIMEOUT("config.client.socket.timeout"),
+	/**
+	 * Template base directory
+	 */
+	CONFIG_TEMPLATES_BASEDIR("config.templates.basedir");
 
 	/**
 	 * Configuration property name

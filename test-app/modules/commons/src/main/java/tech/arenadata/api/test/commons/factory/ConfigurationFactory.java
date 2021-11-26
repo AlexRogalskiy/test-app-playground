@@ -78,7 +78,7 @@ public final class ConfigurationFactory {
 	 */
 	public int getServerPort() {
 		final var property = getProperty(CONFIG_APP_PORT);
-		return getPropertyValueAsInt(getProperty(CONFIG_APP_PORT))
+		return getPropertyValueAsInt(property)
 			.filter(ServiceUtils::isPositive)
 			.orElseThrow(() -> createPortError(property));
 	}
@@ -90,9 +90,20 @@ public final class ConfigurationFactory {
 	 */
 	public String getServerPath() {
 		final var property = getProperty(CONFIG_APP_PATH);
-		return getPropertyValueAsString(getProperty(CONFIG_APP_PATH))
+		return getPropertyValueAsString(property)
 			.map(value -> !value.startsWith("/") ? "/" + value : value)
 			.orElseThrow(() -> createPathError(property));
+	}
+
+	/**
+	 * Returns {@link String} templates directory.
+	 *
+	 * @return templates directory
+	 */
+	public String getTemplatesDir() {
+		final var property = getProperty(CONFIG_TEMPLATES_BASEDIR);
+		return getPropertyValueAsString(property)
+			.orElseThrow(() -> createTemplatesError(property));
 	}
 
 	/**

@@ -2,13 +2,12 @@ package tech.arenadata.api.test.commons.utils;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
+import java.io.FileNotFoundException;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -94,32 +93,31 @@ public class ServiceUtils {
 	}
 
 	public static File resourceToFile(final String... paths) {
+		final var resourceName = join(paths, File.separator);
 		try {
-			final var resourceName = join(paths, File.separator);
-			final var fileUrl = ConfigurationUtils.class.getClassLoader().getResource(resourceName);
-
-			if (Objects.isNull(fileUrl)) {
-				throw new IOException(format("Resource not found by paths: {%s}", join(paths)));
+			final var file = new File(resourceName);
+			if (!file.exists()) {
+				throw new FileNotFoundException(format("Error: file {%s} not found", resourceName));
 			}
 
-			return new File(fileUrl.toURI());
+			return file;
 		} catch (Exception ex) {
-			log.error("Cannot convert resource with name: {} into file", join(paths), ex);
+			log.error("Cannot convert resource with path: {} into file", resourceName, ex);
 			throw new IllegalArgumentException(ex);
 		}
 	}
 
 	public static String resourceToString(final String... paths) {
 		final var resourceName = join(paths, File.separator);
-		try (final var fileStream = ConfigurationUtils.class.getClassLoader().getResourceAsStream(resourceName)) {
-
-			if (Objects.isNull(fileStream)) {
-				throw new IOException(format("Resource not found by paths: {%s}", join(paths)));
+		try {
+			final var file = new File(resourceName);
+			if (!file.exists()) {
+				throw new FileNotFoundException(format("Error: file {%s} not found", resourceName));
 			}
 
-			return IOUtils.toString(fileStream, UTF_8);
+			return FileUtils.readFileToString(file, UTF_8);
 		} catch (Exception ex) {
-			log.error("Cannot convert resource with name: {} into string", join(paths), ex);
+			log.error("Cannot convert resource with path: {} into string", resourceName, ex);
 			throw new IllegalArgumentException(ex);
 		}
 	}

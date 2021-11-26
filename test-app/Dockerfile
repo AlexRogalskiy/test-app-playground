@@ -15,23 +15,23 @@ RUN mkdir -p ./modules/assertions \
     && mkdir -p ./modules/it
 
 ## copy source files
-COPY pom.xml ./ \
-     modules/assertions/pom.xml  ./modules/assertions/ \
-     modules/bom/pom.xml  ./modules/bom/ \
-     modules/client/pom.xml  ./modules/client/ \
-     modules/commons/pom.xml  ./modules/commons/ \
-     modules/extensions/pom.xml  ./modules/extensions/ \
-     modules/it/pom.xml  ./modules/it/
+COPY pom.xml ./
+COPY modules/assertions/pom.xml  ./modules/assertions/
+COPY modules/bom/pom.xml  ./modules/bom/
+COPY modules/client/pom.xml  ./modules/client/
+COPY modules/commons/pom.xml  ./modules/commons/
+COPY modules/extensions/pom.xml  ./modules/extensions/
+COPY modules/it/pom.xml  ./modules/it/
 
 ## build dependencies
 RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean verify --fail-never dependency:copy-dependencies dependency:resolve-plugins dependency:go-offline
 
 ## copy source files
-COPY modules/assertions/src  ./modules/assertions/src/ \
-     modules/client/src  ./modules/client/src/ \
-     modules/commons/src  ./modules/commons/src/ \
-     modules/extensions/src  ./modules/extensions/src/ \
-     modules/it/src  ./modules/it/src/
+COPY modules/assertions/src  ./modules/assertions/src/
+COPY modules/client/src  ./modules/client/src/
+COPY modules/commons/src  ./modules/commons/src/
+COPY modules/extensions/src  ./modules/extensions/src/
+COPY modules/it/src  ./modules/it/src/
 
 ## build project
 RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean package

@@ -6,7 +6,7 @@ import java.security.Permission;
 import java.util.stream.Stream;
 
 /**
- * Test runner for cucumber scenarios.
+ * Test runner for cucumber test scenarios.
  */
 @Slf4j
 public final class TestRunner {
@@ -18,14 +18,9 @@ public final class TestRunner {
 		"--glue", "tech.arenadata.api.test.it.hooks",
 		"--glue", "tech.arenadata.api.test.it.steps",
 		"--plugin", "pretty",
-		"--plugin", "json:.build/bin/cucumber-reports/cucumber-pretty.json",
+		"--plugin", "json:./.build/bin/cucumber/reports/report-pretty.json",
 		"--tags", "@rest-api",
-		"/Users/user/repo/test-app-playground/test-app/modules/it/src/test/resources/features/template_13.feature"
-//		"classpath:features",
-//		"--glue", "scenarios", "src/test/resources", "tech.arenadata.api.test.it.steps", "tech.arenadata.api.test.it.hooks",
-//		"--plugin", "pretty",
-//		"--plugin", "json:.build/bin/cucumber-reports/cucumber-pretty.json",
-//		"--tags", "@rest-api"
+		"modules/it/src/main/resources/features"
 	};
 
 	public static void main(final String[] args) {

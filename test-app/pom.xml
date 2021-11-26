@@ -97,6 +97,115 @@
 	</modules>
 
 	<profiles>
+		<!-- Contract tests profile -->
+		<profile>
+			<id>it</id>
+			<properties>
+				<surefire.commands>
+					--enable-preview
+				</surefire.commands>
+				<surefire.file>
+					-Dfile.encoding=${project.build.sourceEncoding}
+				</surefire.file>
+				<surefire.memory>
+					-Xmx1024m
+					-XX:ReservedCodeCacheSize=1G
+					-Dsun.zip.disableMemoryMapping=true
+				</surefire.memory>
+				<surefire.network>
+					-Djava.net.preferIPv4Stack=true
+					-Djdk.net.URLClassPath.disableClassPathURLCheck=true
+				</surefire.network>
+				<surefire.timezone>
+					-Duser.timezone=Europe/Moscow
+				</surefire.timezone>
+				<surefire.agent>
+					-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+				</surefire.agent>
+			</properties>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<version>${maven-surefire-plugin.version}</version>
+							<configuration>
+								<reuseForks>false</reuseForks>
+								<forkCount>1</forkCount>
+								<useSystemClassLoader>false</useSystemClassLoader>
+								<testFailureIgnore>false</testFailureIgnore>
+								<forkNode implementation="org.apache.maven.plugin.surefire.extensions.SurefireForkNodeFactory"/>
+								<argLine>
+									${surefire.agent}
+									${surefire.memory}
+									${surefire.file}
+									${surefire.network}
+									${surefire.timezone}
+									${surefire.commands}
+								</argLine>
+								<classpathDependencyExcludes>
+									<classpathDependencyExcludes>org.projectlombok:lombok</classpathDependencyExcludes>
+								</classpathDependencyExcludes>
+								<properties>
+									<property>
+										<name>listener</name>
+										<value>org.junit.platform.launcher.listeners.SummaryGeneratingListener</value>
+									</property>
+								</properties>
+								<systemProperties>
+									<property>
+										<name>allure.results.directory</name>
+										<value>${project.build.directory}/allure-results</value>
+									</property>
+									<property>
+										<name>allure.reports.directory</name>
+										<value>${project.build.directory}/allure-reports</value>
+									</property>
+								</systemProperties>
+							</configuration>
+							<dependencies>
+								<dependency>
+									<groupId>org.aspectj</groupId>
+									<artifactId>aspectjweaver</artifactId>
+									<version>${aspectj.version}</version>
+								</dependency>
+								<dependency>
+									<groupId>org.apache.maven.surefire</groupId>
+									<artifactId>maven-surefire-common</artifactId>
+									<version>${maven-surefire-plugin.version}</version>
+								</dependency>
+							</dependencies>
+						</plugin>
+
+						<plugin>
+							<groupId>io.qameta.allure</groupId>
+							<artifactId>allure-maven</artifactId>
+							<version>${maven-allure-plugin.version}</version>
+							<configuration>
+								<outputDirectory>${project.build.directory}</outputDirectory>
+								<reportingOutputDirectory>${project.build.directory}</reportingOutputDirectory>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+
+				<!-- Use in lifecycle -->
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${maven-surefire-plugin.version}</version>
+					</plugin>
+					<plugin>
+						<groupId>io.qameta.allure</groupId>
+						<artifactId>allure-maven</artifactId>
+						<version>${maven-allure-plugin.version}</version>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 		<!-- Report profile -->
 		<profile>
 			<id>report</id>
@@ -144,7 +253,7 @@
 
 		<!-- Check dependencies profile -->
 		<profile>
-			<id>owasp</id>
+			<id>security</id>
 			<build>
 				<plugins>
 					<plugin>
