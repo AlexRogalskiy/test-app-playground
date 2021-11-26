@@ -2,8 +2,8 @@ package tech.arenadata.api.test.commons.enumeration;
 
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import tech.arenadata.api.test.commons.annotation.GenerateResourceBundle;
 import tech.arenadata.api.test.commons.interfaces.ErrorTemplate;
+import tech.arenadata.api.test.extensions.annotation.GenerateResourceBundle;
 
 /**
  * General {@link ErrorTemplate} message template codes
@@ -35,7 +35,11 @@ public enum GeneralErrorTemplateType implements ErrorTemplate {
 	/**
 	 * Invalid json parse exception
 	 */
-	DATA_JSON_PARSE_ERROR("error.data.json.parse.invalid");
+	DATA_JSON_PARSE_ERROR("error.data.json.parse.invalid"),
+	/**
+	 * Invalid yaml parse exception
+	 */
+	DATA_YAML_PARSE_ERROR("error.data.yaml.parse.invalid");
 
 	/**
 	 * {@link String} message code

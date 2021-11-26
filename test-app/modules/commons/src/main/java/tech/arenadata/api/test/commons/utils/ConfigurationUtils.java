@@ -5,12 +5,12 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import tech.arenadata.api.test.commons.enumeration.ConfigPropertyType;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Optional;
+import java.nio.file.Paths;
 import java.util.Properties;
+
+import static java.util.Optional.ofNullable;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * General utilities for accessing configuration properties
@@ -19,8 +19,7 @@ import java.util.Properties;
 @UtilityClass
 public class ConfigurationUtils {
 
-	private static final String CONFIGURATION_FILE = getConfigurationDir()
-		+ "/config.properties";
+	private static final String CONFIGURATION_FILE = Paths.get(getConfigurationDir(), "config.properties").toString();
 
 	private static final Properties properties = getConfigurationProps();
 
@@ -39,13 +38,9 @@ public class ConfigurationUtils {
 	@SneakyThrows
 	private static Properties getConfigurationProps() {
 		final var properties = new Properties();
-		try {
-			final var configFile = new File(CONFIGURATION_FILE);
-			if (configFile.exists()) {
-				properties.load(new FileInputStream(configFile));
-			} else {
-				throw new FileNotFoundException("Error: configuration File [" + CONFIGURATION_FILE + "] not found");
-			}
+		try (final var fileStream = ConfigurationUtils.class.getClassLoader()
+			.getResourceAsStream(CONFIGURATION_FILE)) {
+			properties.load(fileStream);
 		} catch (IOException ex) {
 			log.error("Configuration could not be loaded.", ex);
 			throw ex;
@@ -55,7 +50,6 @@ public class ConfigurationUtils {
 	}
 
 	private static String getConfigurationDir() {
-		return Optional.ofNullable(System.getenv("CONFIG_DIR"))
-			.orElse("src/test/resources");
+		return ofNullable(System.getenv("CONFIG_DIR")).orElse(EMPTY);
 	}
 }

@@ -1,7 +1,6 @@
 package tech.arenadata.api.test.client.configuration;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -23,22 +22,8 @@ import java.util.Objects;
 /**
  * Http client factory
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class HttpClientFactory {
-
-	/**
-	 * Http client factory default instance
-	 */
-	private static final HttpClientFactory INSTANCE = new HttpClientFactory();
-
-	/**
-	 * Returns default {@link HttpClientFactory} instance
-	 *
-	 * @return http client factory
-	 */
-	public static HttpClientFactory getInstance() {
-		return INSTANCE;
-	}
+@UtilityClass
+public class HttpClientFactory {
 
 	/**
 	 * Returns {@link HttpClient} instance.

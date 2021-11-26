@@ -2,11 +2,22 @@ package tech.arenadata.api.test.commons.utils;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.lang.String.format;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Optional.ofNullable;
+import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * General service utilities.
@@ -67,7 +78,7 @@ public class ServiceUtils {
 	private static <T> Optional<T> getPropertyValue(final String value,
 													final Function<String, T> validator) {
 		try {
-			return Optional.ofNullable(value)
+			return ofNullable(value)
 				.map(StringUtils::trimToNull)
 				.filter(StringUtils::isNotEmpty)
 				.map(validator);
@@ -76,5 +87,40 @@ public class ServiceUtils {
 		}
 
 		return Optional.empty();
+	}
+
+	public static <T> String iterableToString(final Iterable<T> chars) {
+		return Stream.ofNullable(chars).map(String::valueOf).collect(Collectors.joining());
+	}
+
+	public static File resourceToFile(final String... paths) {
+		try {
+			final var resourceName = join(paths, File.separator);
+			final var fileUrl = ConfigurationUtils.class.getClassLoader().getResource(resourceName);
+
+			if (Objects.isNull(fileUrl)) {
+				throw new IOException(format("Resource not found by paths: {%s}", join(paths)));
+			}
+
+			return new File(fileUrl.toURI());
+		} catch (Exception ex) {
+			log.error("Cannot convert resource with name: {} into file", join(paths), ex);
+			throw new IllegalArgumentException(ex);
+		}
+	}
+
+	public static String resourceToString(final String... paths) {
+		final var resourceName = join(paths, File.separator);
+		try (final var fileStream = ConfigurationUtils.class.getClassLoader().getResourceAsStream(resourceName)) {
+
+			if (Objects.isNull(fileStream)) {
+				throw new IOException(format("Resource not found by paths: {%s}", join(paths)));
+			}
+
+			return IOUtils.toString(fileStream, UTF_8);
+		} catch (Exception ex) {
+			log.error("Cannot convert resource with name: {} into string", join(paths), ex);
+			throw new IllegalArgumentException(ex);
+		}
 	}
 }

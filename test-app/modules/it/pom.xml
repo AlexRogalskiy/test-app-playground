@@ -21,6 +21,8 @@
 		<!-- versions -->
 		<allure.version>2.16.1</allure.version>
 		<junit-platform.version>1.8.1</junit-platform.version>
+		<selenide.version>6.1.0</selenide.version>
+		<httpmime.version>4.5.13</httpmime.version>
 
 		<test-api.version>1.0.0</test-api.version>
 	</properties>
@@ -179,12 +181,12 @@
 			<version>${slf4j.version}</version>
 		</dependency>
 
-		<!-- HttpCore dependencies-->
+		<!-- HttpMime dependencies-->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
-			<version>4.5.13</version>
-			<scope>test</scope>
+			<version>${httpmime.version}</version>
+<!--			<scope>test</scope>-->
 		</dependency>
 
 		<!-- Junit5 dependencies -->
@@ -192,7 +194,7 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>${junit-jupiter.version}</version>
-			<scope>test</scope>
+<!--			<scope>test</scope>-->
 		</dependency>
 		<!--		<dependency>-->
 		<!--			<groupId>org.junit.jupiter</groupId>-->
@@ -215,7 +217,7 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${junit-jupiter.version}</version>
-			<scope>test</scope>
+<!--			<scope>test</scope>-->
 		</dependency>
 		<!--		<dependency>-->
 		<!--			<groupId>org.junit.platform</groupId>-->
@@ -245,7 +247,7 @@
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-suite</artifactId>
 			<version>${junit-platform.version}</version>
-			<scope>test</scope>
+<!--			<scope>test</scope>-->
 		</dependency>
 
 		<!-- Cucumber dependencies -->
@@ -256,12 +258,19 @@
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-java</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-junit-platform-engine</artifactId>
-			<scope>test</scope>
+<!--			<scope>test</scope>-->
+		</dependency>
+
+		<!-- Selenide dependencies -->
+		<dependency>
+			<groupId>com.codeborne</groupId>
+			<artifactId>selenide</artifactId>
+			<version>${selenide.version}</version>
+<!--			<scope>test</scope>-->
 		</dependency>
 
 		<!-- Assertj dependencies -->
@@ -269,7 +278,7 @@
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
 			<version>${assertj.version}</version>
-			<scope>test</scope>
+<!--			<scope>test</scope>-->
 		</dependency>
 
 		<!-- Allure dependencies -->
@@ -277,21 +286,13 @@
 			<groupId>io.qameta.allure</groupId>
 			<artifactId>allure-junit5</artifactId>
 			<version>${allure.version}</version>
-			<scope>test</scope>
+<!--			<scope>test</scope>-->
 		</dependency>
 		<dependency>
 			<groupId>io.qameta.allure</groupId>
 			<artifactId>allure-cucumber-jvm</artifactId>
 			<version>${allure.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- TestContainers dependencies -->
-		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>testcontainers</artifactId>
-			<version>${testcontainers.version}</version>
-			<scope>test</scope>
+<!--			<scope>test</scope>-->
 		</dependency>
 
 		<!-- Test Api dependencies-->
@@ -299,25 +300,25 @@
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-commons</artifactId>
 			<version>${test-api.version}</version>
-			<scope>test</scope>
+<!--			<scope>test</scope>-->
 		</dependency>
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-assertions</artifactId>
 			<version>${test-api.version}</version>
-			<scope>test</scope>
+<!--			<scope>test</scope>-->
 		</dependency>
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-client</artifactId>
 			<version>${test-api.version}</version>
-			<scope>test</scope>
+<!--			<scope>test</scope>-->
 		</dependency>
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-extensions</artifactId>
 			<version>${test-api.version}</version>
-			<scope>test</scope>
+<!--			<scope>test</scope>-->
 		</dependency>
 	</dependencies>
 

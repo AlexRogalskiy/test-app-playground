@@ -1,0 +1,23 @@
+- id: element-a
+  label: "Element a"
+  text: "Element a"
+- id: element-b
+  label: "Element b"
+  text: "Element b"
+  depend: element-a
+- id: element-c
+  label: "Element c"
+  text: "Element c"
+  depend: element-b
+- id: element-d
+  label: "Element d"
+  text: "Element d"
+  depend: element-b
+- id: element-e
+  label: "Element e"
+  text: "Element e"
+  depend: element-a
+- id: element-f
+  label: "Element f"
+  text: "Element f"
+  depend: element-f

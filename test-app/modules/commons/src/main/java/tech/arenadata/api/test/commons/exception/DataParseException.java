@@ -3,6 +3,7 @@ package tech.arenadata.api.test.commons.exception;
 import lombok.NonNull;
 
 import static tech.arenadata.api.test.commons.enumeration.GeneralErrorTemplateType.DATA_JSON_PARSE_ERROR;
+import static tech.arenadata.api.test.commons.enumeration.GeneralErrorTemplateType.DATA_YAML_PARSE_ERROR;
 
 /**
  * Data parse {@link RuntimeException} implementation
@@ -57,10 +58,21 @@ public class DataParseException extends RuntimeException {
 	 * Returns json {@link DataParseException} by input parameters
 	 *
 	 * @param args initial input message arguments {@link Object}
-	 * @return host {@link DataParseException}
+	 * @return json {@link DataParseException}
 	 */
 	@NonNull
 	public static DataParseException createJsonParseError(final Object... args) {
 		return createError(DATA_JSON_PARSE_ERROR.getLocalizedMessage(args));
+	}
+
+	/**
+	 * Returns yaml {@link DataParseException} by input parameters
+	 *
+	 * @param args initial input message arguments {@link Object}
+	 * @return yaml {@link DataParseException}
+	 */
+	@NonNull
+	public static DataParseException createYamlParseError(final Object... args) {
+		return createError(DATA_YAML_PARSE_ERROR.getLocalizedMessage(args));
 	}
 }

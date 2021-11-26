@@ -23,7 +23,23 @@ import static org.apache.http.client.utils.URLEncodedUtils.parsePathSegments;
 public class HttpClientConfigurer {
 
 	/**
-	 * Returns {@link URL} server by provided configuration.
+	 * Returns base {@link URL} server url.
+	 *
+	 * @return base server url
+	 */
+	@SneakyThrows
+	public String createBaseServerUrl() {
+		final var config = ConfigurationFactory.getInstance();
+		return new URIBuilder()
+			.setScheme(config.getServerScheme())
+			.setHost(config.getServerHost())
+			.setPort(config.getServerPort())
+			.build()
+			.toString();
+	}
+
+	/**
+	 * Returns server {@link URL} by provided configuration.
 	 *
 	 * @param pathSegments initial input {@link String} collection of url path segments to operate by
 	 * @return server url

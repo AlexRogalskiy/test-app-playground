@@ -19,22 +19,17 @@
 
 	<properties>
 		<!-- versions -->
+		<commons-lang3.version>3.12.0</commons-lang3.version>
+
 		<test-api.version>1.0.0</test-api.version>
 	</properties>
 
 	<dependencies>
-		<!-- Junit5 dependencies -->
+		<!-- Commons dependencies -->
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>${junit-jupiter.version}</version>
-		</dependency>
-
-		<!-- Test Api dependencies-->
-		<dependency>
-			<groupId>tech.arenadata.api.test</groupId>
-			<artifactId>test-api-commons</artifactId>
-			<version>${test-api.version}</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -56,22 +51,5 @@
 				<directory>${project.basedir}/src/test/resources</directory>
 			</testResource>
 		</testResources>
-
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<annotationProcessorPaths combine.children="append">
-						<annotationProcessorPath>
-							<groupId>tech.arenadata.api.test</groupId>
-							<artifactId>test-api-commons</artifactId>
-							<version>${test-api.version}</version>
-						</annotationProcessorPath>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 </project>

@@ -12,7 +12,7 @@
 			<outputDirectory>/</outputDirectory>
 			<useProjectArtifact>true</useProjectArtifact>
 			<unpack>true</unpack>
-			<scope>runtime</scope>
+			<scope>compile</scope>
 		</dependencySet>
 	</dependencySets>
 	<fileSets>
@@ -22,6 +22,24 @@
 			<includes>
 				<include>*</include>
 			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.outputDirectory}</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>**/*.class</include>
+				<include>**/*.properties</include>
+			</includes>
+			<useDefaultExcludes>true</useDefaultExcludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.testOutputDirectory}</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>**/*.class</include>
+				<include>**/*.properties</include>
+			</includes>
+			<useDefaultExcludes>true</useDefaultExcludes>
 		</fileSet>
 	</fileSets>
 </assembly>

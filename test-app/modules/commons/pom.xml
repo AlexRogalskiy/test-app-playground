@@ -20,9 +20,11 @@
 	<properties>
 		<!-- versions -->
 		<commons-lang3.version>3.12.0</commons-lang3.version>
-<!--		<commons-io.version>1.3.2</commons-io.version>-->
-<!--		<httpcore.version>4.4.14</httpcore.version>-->
+		<commons-io.version>2.11.0</commons-io.version>
+		<snakeyaml.version>1.29</snakeyaml.version>
 		<slf4j-api.version>2.0.0-alpha4</slf4j-api.version>
+
+		<test-api.version>1.0.0</test-api.version>
 	</properties>
 
 	<dependencies>
@@ -32,11 +34,11 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons-lang3.version}</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>commons-io</groupId>-->
-<!--			<artifactId>commons-io</artifactId>-->
-<!--			<version>${commons-io.version}</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
 
 		<!-- Assertj dependencies -->
 		<dependency>
@@ -45,18 +47,18 @@
 			<version>${assertj.version}</version>
 		</dependency>
 
-<!--		&lt;!&ndash; HttpCore dependencies &ndash;&gt;-->
-<!--		<dependency>-->
-<!--			<groupId>org.apache.httpcomponents</groupId>-->
-<!--			<artifactId>httpcore</artifactId>-->
-<!--			<version>${httpcore.version}</version>-->
-<!--			<exclusions>-->
-<!--				<exclusion>-->
-<!--					<artifactId>commons-logging</artifactId>-->
-<!--					<groupId>commons-logging</groupId>-->
-<!--				</exclusion>-->
-<!--			</exclusions>-->
-<!--		</dependency>-->
+		<!--		&lt;!&ndash; HttpCore dependencies &ndash;&gt;-->
+		<!--		<dependency>-->
+		<!--			<groupId>org.apache.httpcomponents</groupId>-->
+		<!--			<artifactId>httpcore</artifactId>-->
+		<!--			<version>${httpcore.version}</version>-->
+		<!--			<exclusions>-->
+		<!--				<exclusion>-->
+		<!--					<artifactId>commons-logging</artifactId>-->
+		<!--					<groupId>commons-logging</groupId>-->
+		<!--				</exclusion>-->
+		<!--			</exclusions>-->
+		<!--		</dependency>-->
 
 		<!-- Jackson dependencies -->
 		<dependency>
@@ -68,11 +70,25 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
+		<!-- Yaml dependencies -->
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>${snakeyaml.version}</version>
+		</dependency>
+
 		<!-- Slf4j dependencies -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- Test api dependencies -->
+		<dependency>
+			<groupId>tech.arenadata.api.test</groupId>
+			<artifactId>test-api-extensions</artifactId>
+			<version>${test-api.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -94,5 +110,22 @@
 				<directory>${project.basedir}/src/test/resources</directory>
 			</testResource>
 		</testResources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<annotationProcessorPaths combine.children="append">
+						<annotationProcessorPath>
+							<groupId>tech.arenadata.api.test</groupId>
+							<artifactId>test-api-extensions</artifactId>
+							<version>${test-api.version}</version>
+						</annotationProcessorPath>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>

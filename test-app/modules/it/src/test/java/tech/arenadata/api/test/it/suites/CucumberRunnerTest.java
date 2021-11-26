@@ -14,7 +14,7 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 @ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@rest-api")
 @ConfigurationParameter(
 	key = GLUE_PROPERTY_NAME,
-	value = "tech.arenadata.api.test.it.steps,tech.arenadata.api.test.it.hooks"
+	value = "tech.arenadata.api.test.it"
 )
 public class CucumberRunnerTest {
 }
