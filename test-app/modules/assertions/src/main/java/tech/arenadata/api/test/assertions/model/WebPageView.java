@@ -10,7 +10,7 @@ import static org.apache.commons.lang3.StringUtils.SPACE;
 import static org.apache.commons.lang3.StringUtils.join;
 
 /**
- * Web page view model.
+ * Web page view model selectors.
  */
 public class WebPageView {
 
@@ -24,6 +24,10 @@ public class WebPageView {
 
 	public SelenideElement getElementById(final String elementId) {
 		return $(format("#%s", elementId));
+	}
+
+	public SelenideElement getElementByTag(final String elementTag) {
+		return $(elementTag);
 	}
 
 	public SelenideElement getElementAt(final int index, final String... cssSelectors) {

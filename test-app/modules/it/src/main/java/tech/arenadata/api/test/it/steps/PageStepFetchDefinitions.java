@@ -27,7 +27,7 @@ public class PageStepFetchDefinitions extends BasePageStepDefinitions {
 	private String url;
 
 	@Given("^users want to fetch uploaded page templates$")
-	public void usersPrepareRequestData() {
+	public void usersPrepareUrl() {
 		this.url = this.getHttpClientConfigurer().createServerUrl();
 	}
 

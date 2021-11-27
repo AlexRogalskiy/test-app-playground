@@ -12,11 +12,11 @@ import org.assertj.core.api.AbstractAssert;
 import tech.arenadata.api.test.commons.helper.JsonParser;
 
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.join;
+import static tech.arenadata.api.test.commons.utils.ServiceUtils.streamOf;
 
 /**
  * Http response {@link AbstractAssert} implementation provided with following validation rules:
@@ -110,7 +110,7 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 	}
 
 	public HttpResponseAssert hasHeaders(final String... expectedHeaders) {
-		Stream.ofNullable(expectedHeaders).flatMap(Stream::of).forEach(this::hasHeader);
+		streamOf(expectedHeaders).forEach(this::hasHeader);
 		return this;
 	}
 
@@ -149,7 +149,7 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 	}
 
 	public HttpResponseAssert hasFieldValues(final Pair<String, String>... expectedFieldPairs) {
-		Stream.ofNullable(expectedFieldPairs).flatMap(Stream::of).forEach(p -> this.hasFieldValue(p.getKey(), p.getValue()));
+		streamOf(expectedFieldPairs).forEach(p -> this.hasFieldValue(p.getKey(), p.getValue()));
 		return this;
 	}
 
@@ -166,7 +166,7 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 	}
 
 	public HttpResponseAssert hasFields(final String... expectedFieldNames) {
-		Stream.ofNullable(expectedFieldNames).flatMap(Stream::of).forEach(this::hasField);
+		streamOf(expectedFieldNames).forEach(this::hasField);
 		return this;
 	}
 

@@ -137,18 +137,22 @@
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-commons</artifactId>
+			<version>${test-api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-assertions</artifactId>
+			<version>${test-api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-client</artifactId>
+			<version>${test-api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>tech.arenadata.api.test</groupId>
 			<artifactId>test-api-extensions</artifactId>
+			<version>${test-api.version}</version>
 		</dependency>
 	</dependencies>
 

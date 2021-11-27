@@ -25,7 +25,8 @@ Feature: Testing a REST API with page template-13
     Then page template with id 'template_13_1' should be successfully installed
 
   Scenario: Page template (template_13_1) rendered on a web service
-    Given users want to view installed template 'template_13_1.yaml' on a web page
+    Given users want to view installed page template on a web page
+    And users want to compare with file template 'template_13_1.yaml'
     When users navigate to web page
     Then page template should be correctly rendered
 
@@ -35,7 +36,8 @@ Feature: Testing a REST API with page template-13
     Then page template with id 'template_13_2' should be successfully installed
 
   Scenario: Page template (template_13_2) rendered on a web service
-    Given users want to view installed template 'template_13_2.yaml' on a web page
+    Given users want to view installed page template on a web page
+    And users want to compare with file template 'template_13_2.yaml'
     When users navigate to web page
     Then page template should be correctly rendered
 

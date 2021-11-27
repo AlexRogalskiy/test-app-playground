@@ -1,4 +1,4 @@
 - id: 3
-  label: "Element  3"
-  link: "http://rambler.ru"
+  label: "Element 3"
+  link: "http://element-3.ru"
   depends: 2

@@ -1,47 +1,47 @@
-@rest-api12
+@rest-api
 Feature: Testing a REST API with page template-12 (multiple templates)
   Users should be able to send POST, GET, DELETE requests to a web service to upload/fetch/delete/install page templates
 
   Scenario: Page template (template_12_1) uploaded to a web service
     Given users want to upload page template
-    And users provide page template file 'src/test/resources/templates/request/template_12_1.yaml'
+    And users provide page template file 'template_12_1.yaml'
     When users upload page template
     Then page template with id 'template_12_1' should be successfully uploaded
 
   Scenario: Page template (template_12_2) uploaded to a web service
     Given users want to upload page template
-    And users provide page template file 'src/test/resources/templates/request/template_12_2.yaml'
+    And users provide page template file 'template_12_2.yaml'
     When users upload page template
     Then page template with id 'template_12_2' should be successfully uploaded
 
   Scenario: Page template (template_12_3) uploaded to a web service
     Given users want to upload page template
-    And users provide page template file 'src/test/resources/templates/request/template_12_3.yaml'
+    And users provide page template file 'template_12_3.yaml'
     When users upload page template
     Then page template with id 'template_12_3' should be successfully uploaded
 
   Scenario: Page template (template_12_4) uploaded to a web service
     Given users want to upload page template
-    And users provide page template file 'src/test/resources/templates/request/template_12_4.yaml'
+    And users provide page template file 'template_12_4.yaml'
     When users upload page template
     Then page template with id 'template_12_4' should be successfully uploaded
 
   Scenario: Page template (template_12_5) uploaded to a web service
     Given users want to upload page template
-    And users provide page template file 'src/test/resources/templates/request/template_12_5.yaml'
+    And users provide page template file 'template_12_5.yaml'
     When users upload page template
     Then page template with id 'template_12_5' should be successfully uploaded
 
   Scenario: Page template (template_12_6) uploaded to a web service
     Given users want to upload page template
-    And users provide page template file 'src/test/resources/templates/request/template_12_6.yaml'
+    And users provide page template file 'template_12_6.yaml'
     When users upload page template
     Then page template with id 'template_12_6' should be successfully uploaded
 
   Scenario: Page templates retrieved from a web service
     Given users want to fetch uploaded page templates
     When users request information on the uploaded page templates
-    Then page templates data 'src/test/resources/templates/response/template_12.json' should be successfully returned
+    Then page templates data 'template_12.json' should be successfully returned
 
   Scenario: Page template (template_12_1) installed on a web service
     Given users want to install uploaded page template with id 'template_12_1'
@@ -59,7 +59,8 @@ Feature: Testing a REST API with page template-12 (multiple templates)
     Then page template with id 'template_12_3' should be successfully installed
 
   Scenario: Page template (template_12_3) rendered on a web service
-    Given users want to view installed template 'src/test/resources/templates/request/template_12_3.yaml' on a web page
+    Given users want to view installed page template on a web page
+    And users want to compare with file template 'template_12_3.yaml'
     When users navigate to web page
     Then page template should be correctly rendered
 

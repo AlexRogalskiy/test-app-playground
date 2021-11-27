@@ -9,11 +9,11 @@ public class ScenarioInterceptorHooks {
 
 	@Before
 	public void beforeScenario() {
-		log.info(">>> Before running test scenario >>>");
+		log.info(">>> Before running test scenario step >>>");
 	}
 
 	@After
 	public void afterScenario() {
-		log.info(">>> After running test scenario >>>");
+		log.info(">>> After running test scenario step >>>");
 	}
 }

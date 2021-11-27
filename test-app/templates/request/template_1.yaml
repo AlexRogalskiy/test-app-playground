@@ -1,4 +1,4 @@
 - id: 1
   label: "Element 1"
-  link: "http://yandex.ru"
-  #depends: {}
+  link: "http://element-1.ru"
+  depends: 1

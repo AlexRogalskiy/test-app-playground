@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
@@ -88,8 +87,9 @@ public class ServiceUtils {
 		return Optional.empty();
 	}
 
-	public static <T> String iterableToString(final Iterable<T> chars) {
-		return Stream.ofNullable(chars).map(String::valueOf).collect(Collectors.joining());
+	@SafeVarargs
+	public static <T> Stream<T> streamOf(final T... items) {
+		return Stream.ofNullable(items).flatMap(Stream::of);
 	}
 
 	public static File resourceToFile(final String... paths) {

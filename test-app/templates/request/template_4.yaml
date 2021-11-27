@@ -1,8 +1,8 @@
 - id: 1
-  label: "yandex"
+  label: "element-1"
 
 - id: 2
-  label: "google"
-  link: "http://google.ru/"
+  label: "element-2"
+  link: "http://element-2.ru/"
   depends: 1
 

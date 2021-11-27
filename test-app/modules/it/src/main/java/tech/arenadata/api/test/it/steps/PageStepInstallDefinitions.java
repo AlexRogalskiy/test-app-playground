@@ -26,7 +26,7 @@ public class PageStepInstallDefinitions extends BasePageStepDefinitions {
 	private String url;
 
 	@Given("users want to install uploaded page template with id {string}")
-	public void usersPrepareRequestData(final String templateId) {
+	public void usersPrepareUrl(final String templateId) {
 		this.url = this.getHttpClientConfigurer().createServerUrl(templateId, "install");
 	}
 
