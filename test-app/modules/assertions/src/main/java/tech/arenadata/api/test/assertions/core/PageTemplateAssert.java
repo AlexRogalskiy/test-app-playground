@@ -36,6 +36,7 @@ public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageT
 			failWithMessage("expected page template should contains <%s> but was <%s>",
 				join(itemTemplates), join(items));
 		}
+
 		return this;
 	}
 
@@ -46,6 +47,7 @@ public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageT
 		if (!items.stream().allMatch(predicate)) {
 			failWithMessage("expected page template should match item template predicate");
 		}
+
 		return this;
 	}
 
@@ -56,6 +58,7 @@ public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageT
 		if (items.stream().anyMatch(predicate)) {
 			failWithMessage("expected page template should match item template predicate");
 		}
+
 		return this;
 	}
 
@@ -66,6 +69,7 @@ public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageT
 		if (items.stream().noneMatch(predicate)) {
 			failWithMessage("expected page template should match item template predicate");
 		}
+
 		return this;
 	}
 
@@ -77,6 +81,7 @@ public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageT
 			failWithMessage("expected page template should contain items but was <%s>",
 				join(items));
 		}
+
 		return this;
 	}
 
@@ -88,6 +93,7 @@ public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageT
 			failWithMessage("expected page template should contain no items but was <%s>",
 				join(items));
 		}
+
 		return this;
 	}
 
@@ -98,6 +104,7 @@ public class PageTemplateAssert extends AbstractAssert<PageTemplateAssert, PageT
 		if (!items.stream().map(mapper).allMatch(new HashSet<>()::add)) {
 			failWithMessage("expected page template should contains unique item templates");
 		}
+
 		return this;
 	}
 

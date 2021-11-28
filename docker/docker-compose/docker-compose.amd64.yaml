@@ -1,0 +1,116 @@
+version: "3.9"
+
+x-deploy: &deploy-template
+  deploy:
+    mode: global
+
+x-logging: &logging-template
+  logging:
+    options:
+      max-size: "100m"
+      max-file: "10"
+
+x-restart: &restart-template
+  restart: unless-stopped
+
+services:
+  selenium-hub:
+    <<: *logging-template
+    <<: *restart-template
+    <<: *deploy-template
+    container_name: ${SELENIUM_HUB_CONTAINER_NAME:-selenium-hub}
+    image: selenium/hub
+    shm_size: 2048MB
+    environment:
+      GRID_MAX_SESSION: 15
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+
+  firefox-node:
+    <<: *logging-template
+    <<: *deploy-template
+    container_name: firefox-node
+    image: selenium/node-firefox
+    shm_size: 1024MB
+    environment:
+      SE_EVENT_BUS_PUBLISH_PORT: 4442
+      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+      SE_EVENT_BUS_HOST: ${SELENIUM_HUB_HOST}
+      HUB_HOST: ${SELENIUM_HUB_HOST}
+      HUB_PORT: ${SELENIUM_HUB_PORT}
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    ports:
+      - 5554
+
+  chrome-node:
+    <<: *logging-template
+    <<: *deploy-template
+    container_name: chrome-node
+    image: selenium/node-chrome
+    shm_size: 1024MB
+    environment:
+      SE_EVENT_BUS_PUBLISH_PORT: 4442
+      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+      SE_EVENT_BUS_HOST: ${SELENIUM_HUB_HOST}
+      HUB_HOST: ${SELENIUM_HUB_HOST}
+      HUB_PORT: ${SELENIUM_HUB_PORT}
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    ports:
+      - 5555
+
+  app:
+    <<: *logging-template
+    <<: *restart-template
+    <<: *deploy-template
+    container_name: ${APP_CONTAINER_NAME:-app}
+    image: ${APP_IMAGE_NAME:-app-rest-api}:${APP_IMAGE_TAG:-latest}
+    build:
+      context: "../../app"
+      dockerfile: Dockerfile
+    ports:
+      - "15000:5000"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --fail --silent localhost:5000 || exit 1" ]
+      start_period: 40s
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+  test-app:
+    <<: *logging-template
+    <<: *restart-template
+    <<: *deploy-template
+    container_name: ${TEST_APP_CONTAINER_NAME:-test-app}
+    image: ${TEST_APP_IMAGE_NAME:-test-app-rest-api}:${TEST_APP_IMAGE_TAG:-latest}
+    build:
+      context: "../../test-app"
+      dockerfile: Dockerfile
+    volumes:
+      - "../../test-app/templates/:/data/templates"
+    environment:
+      CONFIG_APP_SCHEME: ${CONFIG_APP_SCHEME}
+      CONFIG_APP_HOST: ${CONFIG_APP_HOST}
+      CONFIG_APP_PATH: ${CONFIG_APP_PATH}
+      CONFIG_APP_PORT: ${CONFIG_APP_PORT}
+      CONFIG_TEMPLATES_DIR: ${CONFIG_TEMPLATES_DIR}
+      CONFIG_JAVA_ARGS: ${CONFIG_JAVA_ARGS}
+      JAVA_OPTS: ${JAVA_OPTS}
+    depends_on:
+      app:
+        condition: service_healthy
+      selenium-hub:
+        condition: service_started
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1450

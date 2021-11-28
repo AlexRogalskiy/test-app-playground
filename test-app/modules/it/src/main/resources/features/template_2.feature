@@ -1,4 +1,4 @@
-@rest-api
+@rest-api1
 Feature: Testing a REST API with page template-2 (invalid parent id dependency)
   Users should be able to send POST, GET, DELETE requests to a web service to upload/fetch/delete/install page templates
 

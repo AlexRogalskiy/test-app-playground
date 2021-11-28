@@ -1,0 +1,17 @@
+{
+    "chrome": {
+        "default": "chrome",
+        "versions": {
+            "91.0": {
+                "image": "dumbdumbych/selenium_vnc_chrome_arm64:91.0.b",
+                "port": "4444",
+                "path": "/",
+                "env": [
+                    "LANG=ru_RU.UTF-8",
+                    "LANGUAGE=ru:en",
+                    "LC_ALL=ru_RU.UTF-8"
+                ]
+            }
+        }
+    }
+}

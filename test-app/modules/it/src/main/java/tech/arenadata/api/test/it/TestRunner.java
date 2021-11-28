@@ -18,9 +18,9 @@ public final class TestRunner {
 		"--glue", "tech.arenadata.api.test.it.hooks",
 		"--glue", "tech.arenadata.api.test.it.steps",
 		"--plugin", "pretty",
-		"--plugin", "json:./.build/bin/cucumber/reports/report-pretty.json",
+		"--plugin", "json:report-pretty.json",
 		"--tags", "@rest-api",
-		"modules/it/src/main/resources/features"
+		"classpath:features"
 	};
 
 	public static void main(final String[] args) {

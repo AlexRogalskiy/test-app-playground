@@ -88,7 +88,7 @@ public class PageStepUploadDefinitions extends BasePageStepDefinitions {
 				.withRepresentation(DEFAULT_REPRESENTATION)
 				.hasStatusCode(status)
 				.hasHeader(CONTENT_TYPE, APPLICATION_JSON.getMimeType())
-				.hasFieldValue("message", message);
+				.hasFieldValue("message", m -> m.startsWith(message));
 		}
 	}
 }

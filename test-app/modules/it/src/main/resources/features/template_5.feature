@@ -1,4 +1,4 @@
-@rest-api
+@rest-api1
 Feature: Testing a REST API with page template-5 (invalid file format)
   Users should be able to send POST, GET, DELETE requests to a web service to upload/fetch/delete/install page templates
 
@@ -6,7 +6,7 @@ Feature: Testing a REST API with page template-5 (invalid file format)
     Given users want to upload page template
     And users provide page template file 'template_5.pdf'
     When users upload page template
-    Then upload operation should fail with status (400) and message 'Allowed file types are {\'yml\', \'yaml\'}'
+    Then upload operation should fail with status (400) and message 'Allowed file types are '
 
   Scenario: Page templates retrieved from a web service
     Given users want to fetch uploaded page templates

@@ -20,12 +20,12 @@ import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @SupportedAnnotationTypes(
-	"tech.arenadata.api.test.commons.annotation.GenerateResourceBundle")
+	"tech.arenadata.api.test.extensions.annotation.GenerateResourceBundle")
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 @SupportedOptions(ResourceBundleAnnotationsProcessor.SKIP_PROCESSOR)
 public class ResourceBundleAnnotationsProcessor extends AbstractProcessor {
 
-	public static final String SKIP_PROCESSOR = "resource.bundle.annotationsprocessor.skip";
+	public static final String SKIP_PROCESSOR = "resource.bundle.annotations.processor.skip";
 
 	public static final String BUNDLES_FILE = "resource-bundles.json";
 

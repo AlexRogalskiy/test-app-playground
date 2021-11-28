@@ -11,30 +11,30 @@ RUN mkdir -p ./modules/assertions \
     && mkdir -p ./modules/bom \
     && mkdir -p ./modules/client \
     && mkdir -p ./modules/commons \
-    && mkdir -p ./modules/extension \
+    && mkdir -p ./modules/extensions \
     && mkdir -p ./modules/it
 
 ## copy source files
-COPY pom.xml ./
-COPY modules/assertions/pom.xml  ./modules/assertions/
-COPY modules/bom/pom.xml  ./modules/bom/
-COPY modules/client/pom.xml  ./modules/client/
-COPY modules/commons/pom.xml  ./modules/commons/
-COPY modules/extensions/pom.xml  ./modules/extensions/
-COPY modules/it/pom.xml  ./modules/it/
+COPY pom.xml .
+COPY modules/assertions/pom.xml  ./modules/assertions
+COPY modules/bom/pom.xml  ./modules/bom
+COPY modules/client/pom.xml  ./modules/client
+COPY modules/commons/pom.xml  ./modules/commons
+COPY modules/extensions/pom.xml  ./modules/extensions
+COPY modules/it/pom.xml  ./modules/it
 
 ## build dependencies
 RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean verify --fail-never dependency:copy-dependencies dependency:resolve-plugins dependency:go-offline
 
 ## copy source files
-COPY modules/assertions/src  ./modules/assertions/src/
-COPY modules/client/src  ./modules/client/src/
-COPY modules/commons/src  ./modules/commons/src/
-COPY modules/extensions/src  ./modules/extensions/src/
-COPY modules/it/src  ./modules/it/src/
+COPY modules/assertions/src  ./modules/assertions/src
+COPY modules/client/src  ./modules/client/src
+COPY modules/commons/src  ./modules/commons/src
+COPY modules/extensions/src  ./modules/extensions/src
+COPY modules/it/src  ./modules/it/src
 
 ## build project
-RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean package
+RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean package -Puber
 
 FROM openjdk:11-slim
 
@@ -57,7 +57,8 @@ ENV APP_DIR="$APP_DIR" \
     BUILD_DIR="$BUILD_DIR"
 
 ENV JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom" \
-    JAVA_VM_OPTS="-XX:NativeMemoryTracking=summary -Xms32m -Xmx2g "
+    JAVA_VM_OPTS="-XX:NativeMemoryTracking=summary -Xms32m -Xmx2g" \
+    CONFIG_JAVA_ARGS=""
 
 ## setup image labels
 LABEL "org.opencontainers.image.title"="$IMAGE_NAME" \
@@ -75,4 +76,4 @@ COPY --from=build --chown=1001 "$APP_DIR/$BUILD_DIR/$JAR_FILE" "$LIB_DIR/app.jar
 WORKDIR "$LIB_DIR"
 
 ## setup entrypoint
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS $JAVA_VM_OPTS -jar app.jar" ]
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS $JAVA_VM_OPTS -jar app.jar $CONFIG_JAVA_ARGS" ]

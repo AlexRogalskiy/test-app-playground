@@ -1,7 +1,6 @@
 package tech.arenadata.api.test.assertions.core;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.Header;
@@ -12,6 +11,7 @@ import org.assertj.core.api.AbstractAssert;
 import tech.arenadata.api.test.commons.helper.JsonParser;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
@@ -26,7 +26,7 @@ import static tech.arenadata.api.test.commons.utils.ServiceUtils.streamOf;
  * - response header / headers
  * - response content
  * - response content length
- * - response field value / field values
+ * - response field value / field values / by matcher
  * - response field / fields
  */
 @Slf4j
@@ -59,6 +59,7 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 			failWithMessage("expected response status code to be <%s> but was <%s>",
 				expectedStatusCode, statusCode);
 		}
+
 		return this;
 	}
 
@@ -70,6 +71,7 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 			failWithMessage("expected response reason phrase to be <%s> but was <%s>",
 				expectedReasonPhrase, reasonPhrase);
 		}
+
 		return this;
 	}
 
@@ -81,6 +83,7 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 			failWithMessage("expected response protocol version to be <%s> but was <%s>",
 				expectedProtocolVersion, protocolVersion);
 		}
+
 		return this;
 	}
 
@@ -91,6 +94,7 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 			failWithMessage("expected response header to be <%s> but was <%s>",
 				expectedHeader, join(this.actual.getAllHeaders()));
 		}
+
 		return this;
 	}
 
@@ -106,6 +110,7 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 			failWithMessage("expected response header to be <%s>: <%s> but was <%s>: <%s>",
 				expectedHeaderName, expectedHeaderValue, header.getName(), header.getValue());
 		}
+
 		return this;
 	}
 
@@ -114,7 +119,6 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 		return this;
 	}
 
-	@SneakyThrows
 	public HttpResponseAssert hasContent(final String expectedContent) {
 		this.isNotNull();
 
@@ -122,6 +126,7 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 			failWithMessage("expected response content to be <%s> but was <%s>",
 				expectedContent, this.content);
 		}
+
 		return this;
 	}
 
@@ -133,10 +138,10 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 			failWithMessage("expected response content length to be <%s> but was <%s>",
 				expectedContentLength, contentLength);
 		}
+
 		return this;
 	}
 
-	@SneakyThrows
 	public HttpResponseAssert hasFieldValue(final String expectedFieldName, final String expectedFieldValue) {
 		this.isNotNull();
 
@@ -145,6 +150,18 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 			failWithMessage("expected response content field value to be <%s> but was <%s>",
 				expectedFieldValue, fieldValue);
 		}
+
+		return this;
+	}
+
+	public HttpResponseAssert hasFieldValue(final String expectedFieldName, final Predicate<String> expectedFieldValue) {
+		this.isNotNull();
+
+		final var fieldValue = this.jsonParser.getField(this.content, expectedFieldName);
+		if (expectedFieldValue.negate().test(fieldValue)) {
+			failWithMessage("expected response content field value should match predicate but was <%s>", fieldValue);
+		}
+
 		return this;
 	}
 
@@ -153,7 +170,6 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 		return this;
 	}
 
-	@SneakyThrows
 	public HttpResponseAssert hasField(final String expectedFieldName) {
 		this.isNotNull();
 
@@ -162,6 +178,7 @@ public class HttpResponseAssert extends AbstractAssert<HttpResponseAssert, HttpR
 			failWithMessage("expected response content field name to be <%s> but was none",
 				expectedFieldName);
 		}
+
 		return this;
 	}
 

@@ -41,6 +41,8 @@ fi
 export DOCKER_BUILDKIT=${DOCKER_BUILDKIT:-1}
 # enable/disable docker cli build option
 export COMPOSE_DOCKER_CLI_BUILD=${COMPOSE_DOCKER_CLI_BUILD:-1}
+# architecture type
+UNAME_ARCH=${UNAME_ARCH:-$(uname -m | sed s/x86_64/amd64/ | sed s/aarch64/arm64/ | sed s/aarch64_be/arm64/)}
 # DOCKER_COMPOSE_CMD stores docker-compose command
 DOCKER_COMPOSE_CMD=$(command -v docker-compose || command -v docker compose)
 

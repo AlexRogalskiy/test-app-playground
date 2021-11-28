@@ -7,6 +7,7 @@ import tech.arenadata.api.test.commons.utils.ServiceUtils;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
+import static java.util.Optional.ofNullable;
 import static tech.arenadata.api.test.commons.enumeration.ConfigPropertyType.*;
 import static tech.arenadata.api.test.commons.exception.ConfigurationException.*;
 import static tech.arenadata.api.test.commons.utils.ConfigurationUtils.getProperty;
@@ -44,7 +45,8 @@ public final class ConfigurationFactory {
 	 * @return server scheme
 	 */
 	public String getServerScheme() {
-		final var property = getProperty(CONFIG_APP_SCHEME);
+		final var property = ofNullable(System.getenv("CONFIG_APP_SCHEME"))
+			.orElseGet(() -> getProperty(CONFIG_APP_SCHEME));
 		return getPropertyValueAsString(property)
 			.orElseThrow(() -> createSchemeError(property));
 	}
@@ -55,7 +57,8 @@ public final class ConfigurationFactory {
 	 * @return server host
 	 */
 	public String getServerHost() {
-		final var property = getProperty(CONFIG_APP_HOST);
+		final var property = ofNullable(System.getenv("CONFIG_APP_HOST"))
+			.orElseGet(() -> getProperty(CONFIG_APP_HOST));
 		return getPropertyValueAsString(property)
 			.orElseThrow(() -> createHostError(property));
 	}
@@ -77,7 +80,8 @@ public final class ConfigurationFactory {
 	 * @return server port
 	 */
 	public int getServerPort() {
-		final var property = getProperty(CONFIG_APP_PORT);
+		final var property = ofNullable(System.getenv("CONFIG_APP_PORT"))
+			.orElseGet(() -> getProperty(CONFIG_APP_PORT));
 		return getPropertyValueAsInt(property)
 			.filter(ServiceUtils::isPositive)
 			.orElseThrow(() -> createPortError(property));
@@ -89,7 +93,8 @@ public final class ConfigurationFactory {
 	 * @return server path
 	 */
 	public String getServerPath() {
-		final var property = getProperty(CONFIG_APP_PATH);
+		final var property = ofNullable(System.getenv("CONFIG_APP_PATH"))
+			.orElseGet(() -> getProperty(CONFIG_APP_PATH));
 		return getPropertyValueAsString(property)
 			.map(value -> !value.startsWith("/") ? "/" + value : value)
 			.orElseThrow(() -> createPathError(property));
@@ -101,7 +106,8 @@ public final class ConfigurationFactory {
 	 * @return templates directory
 	 */
 	public String getTemplatesDir() {
-		final var property = getProperty(CONFIG_TEMPLATES_BASEDIR);
+		final var property = ofNullable(System.getenv("CONFIG_TEMPLATES_DIR"))
+			.orElseGet(() -> getProperty(CONFIG_TEMPLATES_BASEDIR));
 		return getPropertyValueAsString(property)
 			.orElseThrow(() -> createTemplatesError(property));
 	}

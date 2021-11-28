@@ -28,6 +28,7 @@ public class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemT
 			failWithMessage("expected item template id to be <%s> but was <%s>",
 				expectedId, id);
 		}
+
 		return this;
 	}
 
@@ -38,6 +39,7 @@ public class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemT
 		if (predicate.negate().test(id)) {
 			failWithMessage("expected item template id should match predicate but was <%s>", id);
 		}
+
 		return this;
 	}
 
@@ -49,6 +51,7 @@ public class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemT
 			failWithMessage("expected item template label to be <%s> but was <%s>",
 				expectedLabel, label);
 		}
+
 		return this;
 	}
 
@@ -59,6 +62,7 @@ public class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemT
 		if (predicate.negate().test(label)) {
 			failWithMessage("expected item template label should match predicate but was <%s>", label);
 		}
+
 		return this;
 	}
 
@@ -70,6 +74,7 @@ public class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemT
 			failWithMessage("expected item template link to be <%s> but was <%s>",
 				expectedLink, link);
 		}
+
 		return this;
 	}
 
@@ -80,6 +85,7 @@ public class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemT
 		if (predicate.negate().test(link)) {
 			failWithMessage("expected item template link should match predicate but was <%s>", link);
 		}
+
 		return this;
 	}
 
@@ -91,6 +97,7 @@ public class ItemTemplateAssert extends AbstractAssert<ItemTemplateAssert, ItemT
 			failWithMessage("expected item template parent id to be <%s> but was <%s>",
 				expectedParentId, parentId);
 		}
+
 		return this;
 	}
 

@@ -24,8 +24,7 @@ EOM
 execute() {
   ## setup directory with docker configurations
   cd "$BASE_DIR/docker-compose" || _exit 1 "Unable to change working directory"
-  _run -f docker-compose-camunda.yaml \
-       -f docker-compose-hasura.yaml \
+  _run -f docker-compose."${UNAME_ARCH}".yaml \
        "$@"
 }
 

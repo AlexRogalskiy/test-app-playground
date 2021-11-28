@@ -5,7 +5,7 @@
 **/charts
 **/docker-compose.yml
 **/Dockerfile
-**/pom.xml
+
 .mvn/
 mvnw/
 .idea/

@@ -13,8 +13,10 @@ TAG ?= latest
 MVN_CMD := $(shell command -v ./mvnw || command -v mvn)
 # DOCKER_CMD stores docker command
 DOCKER_CMD := $(shell command -v docker)
+# MAVEN_PROFILES stores default maven profiles
+MAVEN_PROFILES := "dev"
 # MAVEN_ARGS stores default maven arguments
-MAVEN_ARGS := --file pom.xml --show-version --batch-mode --errors --lax-checksums -Dinvoker.skip=true -Dmaven.exec.skip=true -Dmaven.install.skip -Dmaven.resources.skip -Dmaven.test.skip=true
+MAVEN_ARGS := --file pom.xml --show-version --batch-mode --errors --lax-checksums -Dinvoker.skip=true -Dmaven.exec.skip=true -Dmaven.install.skip -Dmaven.resources.skip -P$(MAVEN_PROFILES)
 
 # Run all by default when "make" is invoked.
 .DEFAULT_GOAL := help
@@ -49,17 +51,23 @@ docker-build:
 # Run maven build command.
 .PHONY: build
 build:
-	$(MVN_CMD) clean package $(MAVEN_ARGS)
+	$(MVN_CMD) clean package $(MAVEN_ARGS) -Puber
 
 # Run maven test command.
 .PHONY: test
 test:
-	$(MVN_CMD) clean test $(MAVEN_ARGS) -Dmaven.test.skip=false
+	$(MVN_CMD) clean test $(MAVEN_ARGS) -Pit
+
+# Run maven offline command.
+.PHONY: offline
+offline:
+	$(MVN_CMD) clean verify $(MAVEN_ARGS) --fail-never dependency:copy-dependencies dependency:resolve-plugins dependency:go-offline
 
 # Run maven update dependencies command.
 .PHONY: update
 update:
-	$(MVN_CMD) versions:display-dependency-updates && $(MVN_CMD) versions:display-plugin-updates
+	$(MVN_CMD) versions:display-dependency-updates
+	$(MVN_CMD) versions:display-plugin-updates
 
 # Run maven new version build.
 .PHONY: version
