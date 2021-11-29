@@ -317,13 +317,6 @@
 									<delimiter>package</delimiter>
 									<file>${session.executionRootDirectory}/license/license-header.txt</file>
 								</licenseHeader>
-								<trimTrailingWhitespace/>
-								<removeUnusedImports/>
-								<endWithNewline/>
-								<indent>
-									<tabs>true</tabs>
-									<spacesPerTab>4</spacesPerTab>
-								</indent>
 							</java>
 						</configuration>
 						<executions>

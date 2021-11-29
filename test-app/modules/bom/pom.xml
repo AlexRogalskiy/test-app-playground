@@ -15,7 +15,11 @@
 
 	<properties>
 		<!-- versions -->
+		<spotless.check.skip>true</spotless.check.skip>
 		<test-api.version>1.0.0</test-api.version>
+
+		<!-- plugins -->
+		<maven-spotless-plugin.version>2.17.4</maven-spotless-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -52,5 +56,13 @@
 	<build>
 		<defaultGoal>clean package</defaultGoal>
 		<finalName>${project.groupId}-${project.artifactId}-${project.version}</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>${maven-spotless-plugin.version}</version>
+			</plugin>
+		</plugins>
 	</build>
 </project>
