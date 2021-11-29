@@ -14,105 +14,40 @@ x-restart: &restart-template
   restart: unless-stopped
 
 services:
-#   selenoid-hub:
-#     <<: *logging-template
-#     <<: *restart-template
-#     <<: *deploy-template
-#     container_name: ${SELENOID_HUB_CONTAINER_NAME:-selenoid-hub}
-#     image: aerokube/selenoid:latest-release
-#     shm_size: 2048MB
-#     privileged: true
-#     healthcheck:
-#       test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider localhost:4444/wd/hub/status || exit 1" ]
-#       start_period: 10s
-#       interval: 10s
-#       timeout: 10s
-#       retries: 5
-#     volumes:
-#       - "/var/run/docker.sock:/var/run/docker.sock"
-#       - "../config/browsers.json:/etc/selenoid/browsers.json:ro"
-#       - "../config/video:/opt/selenoid/video"
-#       - "../config/logs:/opt/selenoid/logs"
-#     environment:
-#       - OVERRIDE_VIDEO_OUTPUT_DIR=/Users/user/repo/test-app-playground/docker/config/video
-#       - TZ=Europe/Moscow
-#       - limit=10
-#     command: ["-conf", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video", "-log-output-dir", "/opt/selenoid/logs", "-service-startup-timeout", "1m0s", "-session-attempt-timeout", "2m0s", "-timeout", "2m0s"]
-#     ports:
-#       - "4444:4444"
+  selenoid-hub:
+    <<: *logging-template
+    <<: *restart-template
+    <<: *deploy-template
+    container_name: ${SELENOID_HUB_CONTAINER_NAME:-selenoid-hub}
+    image: aerokube/selenoid:latest-release
+    shm_size: 2048MB
+    privileged: true
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider localhost:4444/wd/hub/status || exit 1" ]
+      start_period: 10s
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "../config/browsers.json:/etc/selenoid/browsers.json:ro"
+      - "../config/video:/opt/selenoid/video"
+      - "../config/logs:/opt/selenoid/logs"
+    environment:
+      - OVERRIDE_VIDEO_OUTPUT_DIR=/Users/user/repo/test-app-playground/docker/config/video
+      - TZ=Europe/Moscow
+      - limit=10
+    command: ["-conf", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video", "-log-output-dir", "/opt/selenoid/logs", "-service-startup-timeout", "1m0s", "-session-attempt-timeout", "2m0s", "-timeout", "2m0s"]
+    ports:
+      - "4444:4444"
 
-#   selenoid:
-#     container_name: selenoid
-#     image: aerokube/selenoid:latest-release
-#     privileged: true
-#     networks:
-#       - default
-#     volumes:
-#       - "/var/run/docker.sock:/var/run/docker.sock"
-#       - "/Users/user/repo/test-app-playground/test-app/modules/it/src/main/resources/browsers.json:/etc/selenoid/browsers.json:ro"
-#     command: ["-conf", "/etc/selenoid/browsers.json", "-service-startup-timeout", "1m"]
-#     ports:
-#       - "4444:4444"
-#
-#   selenoid-ui:
-#     image: aerokube/selenoid-ui
-#     links:
-#       - selenoid
-#     ports:
-#       - "8080:8080"
-#     command: ["--selenoid-uri", "http://selenoid:4444"]
-
-#   selenium-hub:
-#     <<: *logging-template
-#     <<: *restart-template
-#     <<: *deploy-template
-#     container_name: ${SELENIUM_HUB_CONTAINER_NAME:-selenium-hub}
-#     image: seleniarm/hub
-#     shm_size: 2048MB
-#     environment:
-#       GRID_MAX_SESSION: 15
-#     ports:
-#       - "4442:4442"
-#       - "4443:4443"
-#       - "4444:4444"
-
-#   firefox-node:
-#     <<: *logging-template
-#     <<: *deploy-template
-#     container_name: firefox-node
-#     image: seleniarm/node-firefox
-#     shm_size: 1024MB
-#     environment:
-#       SE_EVENT_BUS_PUBLISH_PORT: 4442
-#       SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
-#       SE_EVENT_BUS_HOST: ${SELENIUM_HUB_HOST}
-#       HUB_HOST: ${SELENIUM_HUB_HOST}
-#       HUB_PORT: ${SELENIUM_HUB_PORT}
-#     volumes:
-#       - /dev/shm:/dev/shm
-#     depends_on:
-#       - selenium-hub
-#     ports:
-#       - 5554
-
-#   chromium-node:
-#     <<: *logging-template
-#     <<: *deploy-template
-#     container_name: chromium-node
-#     image: seleniarm/node-chromium
-#     shm_size: 1024MB
-#     environment:
-#       SE_EVENT_BUS_PUBLISH_PORT: 4442
-#       SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
-#       SE_EVENT_BUS_HOST: ${SELENIUM_HUB_HOST}
-#       HUB_HOST: ${SELENIUM_HUB_HOST}
-#       HUB_PORT: ${SELENIUM_HUB_PORT}
-#     volumes:
-#       - /dev/shm:/dev/shm
-#     depends_on:
-#       - selenium-hub
-#     ports:
-#       - 5555
+  selenoid-ui:
+    image: aerokube/selenoid-ui
+    links:
+      - selenoid-hub
+    ports:
+      - "8080:8080"
+    command: ["--selenoid-uri", "http://${SELENOID_HUB_CONTAINER_NAME}:4444"]
 
   app:
     <<: *logging-template
@@ -150,12 +85,12 @@ services:
       CONFIG_APP_PORT: ${CONFIG_APP_PORT}
       CONFIG_TEMPLATES_DIR: ${CONFIG_TEMPLATES_DIR}
       CONFIG_JAVA_ARGS: ${CONFIG_JAVA_ARGS}
-      JAVA_OPTS: ${JAVA_OPTS}
+      JAVA_EXEC_OPTS: ${JAVA_EXEC_OPTS}
     depends_on:
       app:
         condition: service_healthy
-#       selenoid-hub:
-#         condition: service_healthy
+      selenoid-hub:
+        condition: service_healthy
 
 networks:
   default:

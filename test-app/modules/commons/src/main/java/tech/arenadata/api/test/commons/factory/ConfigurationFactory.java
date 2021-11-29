@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import tech.arenadata.api.test.commons.utils.ServiceUtils;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
@@ -109,6 +111,10 @@ public final class ConfigurationFactory {
 		final var property = ofNullable(System.getenv("CONFIG_TEMPLATES_DIR"))
 			.orElseGet(() -> getProperty(CONFIG_TEMPLATES_BASEDIR));
 		return getPropertyValueAsString(property)
+			.map(Paths::get)
+			.map(Path::normalize)
+			.map(Path::toAbsolutePath)
+			.map(Path::toString)
 			.orElseThrow(() -> createTemplatesError(property));
 	}
 

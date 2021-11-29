@@ -90,24 +90,24 @@ services:
     <<: *deploy-template
     container_name: ${TEST_APP_CONTAINER_NAME:-test-app}
     image: ${TEST_APP_IMAGE_NAME:-test-app-rest-api}:${TEST_APP_IMAGE_TAG:-latest}
-    build:
-      context: "../../test-app"
-      dockerfile: Dockerfile
-    volumes:
-      - "../../test-app/templates/:/data/templates"
-    environment:
-      CONFIG_APP_SCHEME: ${CONFIG_APP_SCHEME}
-      CONFIG_APP_HOST: ${CONFIG_APP_HOST}
-      CONFIG_APP_PATH: ${CONFIG_APP_PATH}
-      CONFIG_APP_PORT: ${CONFIG_APP_PORT}
-      CONFIG_TEMPLATES_DIR: ${CONFIG_TEMPLATES_DIR}
-      CONFIG_JAVA_ARGS: ${CONFIG_JAVA_ARGS}
-      JAVA_OPTS: ${JAVA_OPTS}
-    depends_on:
-      app:
-        condition: service_healthy
-      selenium-hub:
-        condition: service_started
+     build:
+       context: "../../test-app"
+       dockerfile: Dockerfile
+     volumes:
+       - "../../test-app/templates/:/data/templates"
+     environment:
+       CONFIG_APP_SCHEME: ${CONFIG_APP_SCHEME}
+       CONFIG_APP_HOST: ${CONFIG_APP_HOST}
+       CONFIG_APP_PATH: ${CONFIG_APP_PATH}
+       CONFIG_APP_PORT: ${CONFIG_APP_PORT}
+       CONFIG_TEMPLATES_DIR: ${CONFIG_TEMPLATES_DIR}
+       CONFIG_JAVA_ARGS: ${CONFIG_JAVA_ARGS}
+       JAVA_EXEC_OPTS: ${JAVA_EXEC_OPTS}
+     depends_on:
+       app:
+         condition: service_healthy
+       selenoid-hub:
+         condition: service_healthy
 
 networks:
   default:

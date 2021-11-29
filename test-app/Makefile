@@ -11,6 +11,8 @@ TAG ?= latest
 
 # MVN_CMD stores maven package manager
 MVN_CMD := $(shell command -v ./mvnw || command -v mvn)
+# JAVA_CMD stores java executable command
+JAVA_CMD := $(shell command -v java)
 # DOCKER_CMD stores docker command
 DOCKER_CMD := $(shell command -v docker)
 # MAVEN_PROFILES stores default maven profiles
@@ -27,13 +29,15 @@ MAVEN_ARGS := --file pom.xml --show-version --batch-mode --errors --lax-checksum
 
 # Run information command with target descriptions.
 .PHONY: help
-##= docker-build: to build docker image
 ##= build: to build project dependencies
+##= docker-build: to build docker image
+##= format: to format java files
+##= lint: to lint java files
+##= local-chrome-run: to run test suites locally with chrome browser
+##= local-firefox-run: to run test suites locally with firefox browser
 ##= test: to run project tests
 ##= update: to update project dependencies
 ##= version: to create new release version
-##= format: to format java files
-##= lint: to lint java files
 help:
 	$(AT)echo
 	$(AT)echo
@@ -62,6 +66,16 @@ test:
 .PHONY: offline
 offline:
 	$(MVN_CMD) clean verify $(MAVEN_ARGS) --fail-never dependency:copy-dependencies dependency:resolve-plugins dependency:go-offline
+
+# Run test suites locally with chrome browser.
+.PHONY: local-chrome-run
+local-chrome-run:
+	$(JAVA_CMD) -Dselenide.browser=chrome -Dselenide.baseurl=http://localhost:15000 -jar .build/bin/tech.arenadata.api.test.it/tech.arenadata.api.test-test-api-it-1.0.0-uber.jar
+
+# Run test suites locally with firefox browser.
+.PHONY: local-firefox-run
+local-firefox-run:
+	$(JAVA_CMD) -Dselenide.browser=firefox -Dselenide.baseurl=http://localhost:15000 -jar .build/bin/tech.arenadata.api.test.it/tech.arenadata.api.test-test-api-it-1.0.0-uber.jar
 
 # Run maven update dependencies command.
 .PHONY: update

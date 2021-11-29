@@ -1,67 +1,138 @@
-### Тестовое задание на должность QA Automation Engineer в Arenadata
-Задание здесь - [https://github.com/dgusakov/test_app](https://github.com/dgusakov/test_app)
+# Test Application Playground
 
-### Требования к ПО
-- Python 3.7 и старше - [www.python.org/getit/](https://www.python.org/getit/)
-- Инструмент для работы с виртуальными окружениями virtualenv
+> Original app repository - [https://github.com/dgusakov/test_app](https://github.com/dgusakov/test_app)
+
+## Table of contents
+
+* [Test Application Playground](#test-application-playground)
+  * [<em>Table of contents</em>](#table-of-contents)
+  * [<em>Summary</em>](#summary)
+  * [<em>How to install</em>](#how-to-install)
+  * [<em>How to build</em>](#how-to-build)
+    * [Test Application build](#test-application-build)
+    * [Test Suites build](#test-suites-build)
+  * [<em>How to run</em>](#how-to-run)
+    * [Local run](#local-run)
+    * [Docker run](#docker-run)
+  * [<em>Issues</em>](#issues)
+  * [<em>Authors</em>](#authors)
+  * [<em>Licensing</em>](#licensing)
+  * [<em>Links</em>](#links)
+
+## Summary
+
+The project consists of the following submodules:
+
+* [**App**](https://github.com/AlexRogalskiy/test-app-playground/blob/master/modules/app) `app`
+  - The REST API application under test.
+* [**Test App**](https://github.com/AlexRogalskiy/test-app-playground/blob/master/modules/test-app) `test-app`
+  - The application with test suites.
+
+## How to install
+
 ```bash
-pip install virtualenv
-```
-- Для web тестов используется библиотека selene. Скачивать webdriver и т.п. нет необходимости. Библиотека все сделает автоматически.
-
-### Копирование репозитория и установка зависимостей
-```bash
-git clone https://github.com/arkuz/arenadata_test
-cd arenadata_test
-virtualenv env
-env/bin/activate
-pip install -r requirements.txt
-```
-
-### Запуск тестов
- - Перед запуском тестов необходимо перейти в каталог проекта `arenadata_test`
- 
-Аргументы запуска:
-- -s - показывать принты в процессе выпонения
-- -v - verbose режим, чтобы видеть, какие тесты были запущены
-
-##### Запуск всех тестов
-```bash
-py.test -s -v tests
-```
-
-##### Запуск API тестов 
-```bash
-py.test -s -v tests/api
-```
-
-##### Запуск web тестов 
-```bash
-py.test -s -v tests/web
+git clone https://github.com/AlexRogalskiy/test-app-playground
+cd test-app-playground
 ```
 
-#### Результат выполнения
+## How to build
+
+### Test Application build
+
 ```bash
-============================= test session starts =============================
-platform win32 -- Python 3.7.4, pytest-6.1.0, py-1.9.0, pluggy-0.13.1 -- C:\Users\arkuz\AppData\Local\Programs\Python\Python37-32\python.exe
-cachedir: .pytest_cache
-rootdir: D:\GitHub\arenadata_test, configfile: pytest.ini
-collecting ... collected 14 items
-
-test_api.py::TestsAPI::test_upload_template_without_data['temp.yaml'] 
-test_api.py::TestsAPI::test_upload_template_without_data['1.yaml'] 
-test_api.py::TestsAPI::test_upload_template_with_data['temp.yaml'] 
-test_api.py::TestsAPI::test_upload_template_with_data['временный.yaml'] 
-test_api.py::TestsAPI::test_upload_template_with_data['1.yaml'] 
-test_api.py::TestsAPI::test_upload_template_invalid['without_extention'] 
-test_api.py::TestsAPI::test_upload_template_invalid['extention_pdf.pdf'] 
-test_api.py::TestsAPI::test_get_templates 
-test_api.py::TestsAPI::test_delete_templates 
-test_api.py::TestsAPI::test_delete_templates_invalid 
-test_api.py::TestsAPI::test_insall_templates 
-test_api.py::TestsAPI::test_insall_templates_not_exist_id 
-test_api.py::TestsAPI::test_insall_templates_invalid 
-test_api.py::TestsAPI::test_insall_empty_template_invalid 
-
-============================= 14 passed in 1.01s ==============================
+cd app
+make docker-build
 ```
+
+### Test Suites build
+
+```bash
+cd test-app
+make build
+make docker-build
+```
+
+## How to run
+
+### Local run
+
+To make the application running locally the following steps should be executed:
+
+#### Running ***Test Application***
+
+```bash
+cd app
+make docker-run
+```
+
+#### Running ***Test Suites***
+
+```bash
+cd test-app
+make local-chrome-run
+
+or
+
+make local-firefox-run
+```
+
+### Docker run
+
+Pull chrome/firefox browser images:
+
+```bash
+docker pull selenoid/vnc:chrome_58.0
+docker pull dumbdumbych/selenium_vnc_chrome_arm64:91.0.b
+
+docker pull selenoid/vnc:firefox_53.0
+```
+
+To make the applications running in docker containers run the following command:
+
+```bash
+make docker-up
+```
+
+To stop docker containers:
+
+```bash
+make docker-down
+```
+
+To view docker containers logs (in live mode):
+
+```bash
+make docker-logs
+```
+
+## Issues
+
+There are several issues that may be arisen during docker run:
+
+- org.openqa.selenium.SessionNotCreatedException: Could not start a new session. Response code 500. Message:
+  wait: http://172.17.0.2:4444/ does not respond in 1m0s
+
+The problem is closely connected with drivers availability with version matching as well as browser containers support
+for several architectures (`amd64`/`arm64`).
+
+## Authors
+
+***Test App Playground***  is maintained by the following GitHub team-members:
+
+[![Author](https://img.shields.io/badge/author-AlexRogalskiy-FB8F0A)](https://github.com/AlexRogalskiy)
+
+with community support please contact with us if you have some question or proposition.
+
+## Licensing
+
+***Test App Playground*** is distributed under MIT license.
+
+Detailed information on license agreement can be found at: [<span style = "background:yellow;font-style:italic">
+[License](https://github.com/AlexRogalskiy/test-app-playground/blob/master/LICENSE.txt)
+</span>]
+
+## Links
+
+[Selenoid Docs](https://aerokube.com/selenoid/latest/)
+[Selenide Docs](https://selenide.org)
+[Cucumber Docs](https://cucumber.io/)

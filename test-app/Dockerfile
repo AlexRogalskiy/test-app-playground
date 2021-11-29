@@ -57,8 +57,7 @@ ENV APP_DIR="$APP_DIR" \
     BUILD_DIR="$BUILD_DIR"
 
 ENV JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom" \
-    JAVA_VM_OPTS="-XX:NativeMemoryTracking=summary -Xms32m -Xmx2g" \
-    CONFIG_JAVA_ARGS=""
+    JAVA_VM_OPTS="-XX:NativeMemoryTracking=summary -Xms32m -Xmx2g"
 
 ## setup image labels
 LABEL "org.opencontainers.image.title"="$IMAGE_NAME" \
@@ -76,4 +75,4 @@ COPY --from=build --chown=1001 "$APP_DIR/$BUILD_DIR/$JAR_FILE" "$LIB_DIR/app.jar
 WORKDIR "$LIB_DIR"
 
 ## setup entrypoint
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS $JAVA_VM_OPTS -jar app.jar $CONFIG_JAVA_ARGS" ]
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS $JAVA_VM_OPTS $JAVA_EXEC_OPTS -jar app.jar $CONFIG_JAVA_ARGS" ]

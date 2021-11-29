@@ -18,7 +18,8 @@ public final class TestRunner {
 		"--glue", "tech.arenadata.api.test.it.hooks",
 		"--glue", "tech.arenadata.api.test.it.steps",
 		"--plugin", "pretty",
-		"--plugin", "json:report-pretty.json",
+		"--plugin", "json:reports/cucumber/report.json",
+		"--plugin", "html:reports/cucumber/report.html",
 		"--tags", "@rest-api",
 		"classpath:features"
 	};
@@ -43,12 +44,14 @@ public final class TestRunner {
 
 		@Override
 		public void checkExit(final int status) {
+			//request operations not permitted in current context
 			//throw new SecurityException();
 		}
 
 		@Override
 		public void checkPermission(final Permission permission) {
 			//request operations not permitted in current context
+			//super.checkPermission(permission);
 		}
 	}
 }

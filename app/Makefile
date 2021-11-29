@@ -1,8 +1,16 @@
-include common.mk
+include ../common.mk
 
 ############################################################################
 # Variables
 ############################################################################
+
+# IMAGE defines docker image
+IMAGE ?= test_app
+# TAG defines docker tag
+TAG ?= latest
+
+# DOCKER_CMD stores docker command
+DOCKER_CMD := $(shell command -v docker)
 
 # Run all by default when "make" is invoked.
 .DEFAULT_GOAL := help
@@ -11,16 +19,10 @@ include common.mk
 # Targets
 ############################################################################
 
-# Make docker script runnable
-.PHONY: _make-runnable
-_make-runnable:
-	$(AT)chmod +x $(ROOT_DIR)/docker/docker-compose.sh
-
 # Run information command with target descriptions.
 .PHONY: help
-##= docker-up: to run docker container
-##= docker-down: to stop docker container
-##= docker-log: to view docker container logs
+##= docker-build: to build docker image
+##= docker-run: to run docker image
 help:
 	$(AT)echo
 	$(AT)echo
@@ -30,17 +32,12 @@ help:
 	$(AT)echo
 	$(AT)echo
 
-# Run docker start command.
-.PHONY: docker-up
-docker-up: _make-runnable
-	$(AT)$(ROOT_DIR)/docker/docker-compose.sh up
+# Run docker build command.
+.PHONY: docker-build
+docker-build:
+	$(DOCKER_CMD) build --rm --platform=linux/$(UNAME_ARCH) -f Dockerfile -t "$(IMAGE):$(TAG)" -t "$(IMAGE):$(GIT_SHA)" .
 
-# Run docker stop command.
-.PHONY: docker-down
-docker-down: _make-runnable
-	$(AT)$(ROOT_DIR)/docker/docker-compose.sh down
-
-# Run docker logs command.
-.PHONY: docker-logs
-docker-logs: _make-runnable
-	$(AT)$(ROOT_DIR)/docker/docker-compose.sh logs
+# Run docker run command.
+.PHONY: docker-run
+docker-run:
+	$(DOCKER_CMD) run -p 15000:5000 -d "$(IMAGE):$(TAG)"
