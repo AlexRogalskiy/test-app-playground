@@ -1,4 +1,4 @@
-@rest-api
+@rest-api12
 Feature: Testing a REST API with page template-12 (multiple templates)
   Users should be able to send POST, GET, DELETE requests to a web service to upload/fetch/delete/install page templates
 

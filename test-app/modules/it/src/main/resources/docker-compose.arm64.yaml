@@ -1,0 +1,99 @@
+version: "3.9"
+
+x-deploy: &deploy-template
+  deploy:
+    mode: global
+
+x-logging: &logging-template
+  logging:
+    options:
+      max-size: "100m"
+      max-file: "10"
+
+x-restart: &restart-template
+  restart: unless-stopped
+
+services:
+  selenoid-hub:
+    <<: *logging-template
+    <<: *restart-template
+    <<: *deploy-template
+    container_name: ${SELENOID_HUB_CONTAINER_NAME:-selenoid-hub}
+    image: aerokube/selenoid:latest-release
+    shm_size: 2048MB
+    privileged: true
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider localhost:4444/wd/hub/status || exit 1" ]
+      start_period: 10s
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "../config/browsers.json:/etc/selenoid/browsers.json:ro"
+      - "../config/video:/opt/selenoid/video"
+      - "../config/logs:/opt/selenoid/logs"
+    environment:
+      - OVERRIDE_VIDEO_OUTPUT_DIR=/Users/user/repo/test-app-playground/docker/config/video
+      - TZ=Europe/Moscow
+      - limit=10
+    command: ["-conf", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video", "-log-output-dir", "/opt/selenoid/logs", "-service-startup-timeout", "1m0s", "-session-attempt-timeout", "2m0s", "-timeout", "2m0s"]
+    ports:
+      - "4444:4444"
+
+  selenoid-ui:
+    image: aerokube/selenoid-ui
+    links:
+      - selenoid-hub
+    ports:
+      - "8080:8080"
+    command: ["--selenoid-uri", "http://${SELENOID_HUB_CONTAINER_NAME}:4444"]
+
+  app:
+    <<: *logging-template
+    <<: *restart-template
+    <<: *deploy-template
+    container_name: ${APP_CONTAINER_NAME:-app}
+    image: ${APP_IMAGE_NAME:-app-rest-api}:${APP_IMAGE_TAG:-latest}
+    build:
+      context: "../../app"
+      dockerfile: Dockerfile
+    ports:
+      - "15000:5000"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --fail --silent localhost:5000 || exit 1" ]
+      start_period: 40s
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+  test-app:
+    <<: *logging-template
+    <<: *restart-template
+    <<: *deploy-template
+    container_name: ${TEST_APP_CONTAINER_NAME:-test-app}
+    image: ${TEST_APP_IMAGE_NAME:-test-app-rest-api}:${TEST_APP_IMAGE_TAG:-latest}
+    build:
+      context: "../../test-app"
+      dockerfile: Dockerfile
+    volumes:
+      - "../../test-app/templates/:/data/templates"
+    environment:
+      CONFIG_APP_SCHEME: ${CONFIG_APP_SCHEME}
+      CONFIG_APP_HOST: ${CONFIG_APP_HOST}
+      CONFIG_APP_PATH: ${CONFIG_APP_PATH}
+      CONFIG_APP_PORT: ${CONFIG_APP_PORT}
+      CONFIG_TEMPLATES_DIR: ${CONFIG_TEMPLATES_DIR}
+      CONFIG_JAVA_ARGS: ${CONFIG_JAVA_ARGS}
+      JAVA_EXEC_OPTS: ${JAVA_EXEC_OPTS}
+    depends_on:
+      app:
+        condition: service_healthy
+      selenoid-hub:
+        condition: service_healthy
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1450
