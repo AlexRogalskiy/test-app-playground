@@ -23,9 +23,9 @@
 
 The project consists of the following submodules:
 
-* [**App**](https://github.com/AlexRogalskiy/test-app-playground/blob/master/modules/app) `app`
+* [**App**](https://github.com/AlexRogalskiy/test-app-playground/blob/master/app) `app`
   - The REST API application under test.
-* [**Test App**](https://github.com/AlexRogalskiy/test-app-playground/blob/master/modules/test-app) `test-app`
+* [**Test App**](https://github.com/AlexRogalskiy/test-app-playground/blob/master/test-app) `test-app`
   - The application with test suites.
 
 ## How to install
@@ -70,15 +70,24 @@ make docker-run
 ```bash
 cd test-app
 make local-chrome-run
+```
 
 or
 
+```bash
+cd test-app
 make local-firefox-run
 ```
 
 ### Docker run
 
-Pull chrome/firefox browser images:
+Pull docker images video recordings support:
+
+```bash
+docker pull selenoid/video-recorder:latest-release
+```
+
+Pull docker images for chrome/firefox support:
 
 ```bash
 docker pull selenoid/vnc:chrome_58.0
@@ -110,7 +119,7 @@ make docker-logs
 There are several issues that may be arisen during docker run:
 
 - org.openqa.selenium.SessionNotCreatedException: Could not start a new session. Response code 500. Message:
-  wait: http://172.17.0.2:4444/ does not respond in 1m0s
+  wait: `http://172.17.0.2:4444/` does not respond in 1m0s
 
 The problem is closely connected with drivers availability with version matching as well as browser containers support
 for several architectures (`amd64`/`arm64`).
@@ -127,12 +136,11 @@ with community support please contact with us if you have some question or propo
 
 ***Test App Playground*** is distributed under MIT license.
 
-Detailed information on license agreement can be found at: [<span style = "background:yellow;font-style:italic">
-[License](https://github.com/AlexRogalskiy/test-app-playground/blob/master/LICENSE.txt)
-</span>]
+The detailed information is presented at 
+[license agreement](https://github.com/AlexRogalskiy/test-app-playground/blob/master/LICENSE.txt)
 
 ## Links
 
-[Selenoid Docs](https://aerokube.com/selenoid/latest/)
-[Selenide Docs](https://selenide.org)
-[Cucumber Docs](https://cucumber.io/)
+- [Selenoid Docs](https://aerokube.com/selenoid/latest/)
+- [Selenide Docs](https://selenide.org)
+- [Cucumber Docs](https://cucumber.io/)

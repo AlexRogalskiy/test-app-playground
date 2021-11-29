@@ -13,6 +13,7 @@ allure-results/
 .idea/
 .reporting/
 .build/
+reports/
 
 .DS_Store
 .metadata
