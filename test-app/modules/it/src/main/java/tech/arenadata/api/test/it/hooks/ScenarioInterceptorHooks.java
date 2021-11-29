@@ -16,8 +16,8 @@ public class ScenarioInterceptorHooks {
 	public static void beforeScenarioAll() {
 		final var capabilities = new DesiredCapabilities();
 		capabilities.setCapability("selenoid:options", Map.of(
-			"enableVNC", false,
-			"enableVideo", false
+			"enableVNC", true,
+			"enableVideo", true
 		));
 
 		Configuration.browserCapabilities = capabilities;

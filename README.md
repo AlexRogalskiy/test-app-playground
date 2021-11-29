@@ -78,13 +78,7 @@ make local-firefox-run
 
 ### Docker run
 
-Pull image for video recordings:
-
-```bash
-docker pull selenoid/video-recorder:latest-release
-```
-
-Pull images for chrome/firefox browser support:
+Pull chrome/firefox browser images:
 
 ```bash
 docker pull selenoid/vnc:chrome_58.0
