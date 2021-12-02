@@ -27,6 +27,8 @@ import static tech.arenadata.api.test.commons.enumeration.GeneralErrorTemplateTy
 
 import lombok.NonNull;
 
+import java.util.function.Supplier;
+
 /** Configuration {@link RuntimeException} implementation */
 public class ConfigurationException extends RuntimeException {
     /** Default explicit serialVersionUID for interoperability */
@@ -67,8 +69,8 @@ public class ConfigurationException extends RuntimeException {
      * @return {@link ConfigurationException}
      */
     @NonNull
-    public static ConfigurationException createError(@NonNull final String message) {
-        return new ConfigurationException(message);
+    public static Supplier<ConfigurationException> createError(@NonNull final String message) {
+        return () -> new ConfigurationException(message);
     }
 
     /**
@@ -78,7 +80,7 @@ public class ConfigurationException extends RuntimeException {
      * @return host {@link ConfigurationException}
      */
     @NonNull
-    public static ConfigurationException createSchemeError(final Object... args) {
+    public static Supplier<ConfigurationException> createSchemeError(final Object... args) {
         return createError(CONFIGURATION_SCHEME_ERROR.getLocalizedMessage(args));
     }
 
@@ -89,7 +91,7 @@ public class ConfigurationException extends RuntimeException {
      * @return host {@link ConfigurationException}
      */
     @NonNull
-    public static ConfigurationException createHostError(final Object... args) {
+    public static Supplier<ConfigurationException> createHostError(final Object... args) {
         return createError(CONFIGURATION_HOST_ERROR.getLocalizedMessage(args));
     }
 
@@ -100,7 +102,7 @@ public class ConfigurationException extends RuntimeException {
      * @return port {@link ConfigurationException}
      */
     @NonNull
-    public static ConfigurationException createPortError(final Object... args) {
+    public static Supplier<ConfigurationException> createPortError(final Object... args) {
         return createError(CONFIGURATION_PORT_ERROR.getLocalizedMessage(args));
     }
 
@@ -111,7 +113,7 @@ public class ConfigurationException extends RuntimeException {
      * @return path {@link ConfigurationException}
      */
     @NonNull
-    public static ConfigurationException createPathError(final Object... args) {
+    public static Supplier<ConfigurationException> createPathError(final Object... args) {
         return createError(CONFIGURATION_PATH_ERROR.getLocalizedMessage(args));
     }
 
@@ -122,7 +124,7 @@ public class ConfigurationException extends RuntimeException {
      * @return path {@link ConfigurationException}
      */
     @NonNull
-    public static ConfigurationException createTemplatesError(final Object... args) {
+    public static Supplier<ConfigurationException> createTemplatesError(final Object... args) {
         return createError(CONFIGURATION_TEMPLATES_DIR_ERROR.getLocalizedMessage(args));
     }
 
@@ -133,7 +135,7 @@ public class ConfigurationException extends RuntimeException {
      * @return port {@link ConfigurationException}
      */
     @NonNull
-    public static ConfigurationException createMessagesBasenameError(final Object... args) {
+    public static Supplier<ConfigurationException> createMessagesBasenameError(final Object... args) {
         return createError(CONFIGURATION_MESSAGES_BASENAME_ERROR.getLocalizedMessage(args));
     }
 }

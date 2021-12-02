@@ -68,7 +68,7 @@ public final class ConfigurationFactory {
         final var property =
                 ofNullable(System.getenv("CONFIG_APP_SCHEME"))
                         .orElseGet(() -> getProperty(CONFIG_APP_SCHEME));
-        return getPropertyValueAsString(property).orElseThrow(() -> createSchemeError(property));
+        return getPropertyValueAsString(property).orElseThrow(createSchemeError(property));
     }
 
     /**
@@ -80,7 +80,7 @@ public final class ConfigurationFactory {
         final var property =
                 ofNullable(System.getenv("CONFIG_APP_HOST"))
                         .orElseGet(() -> getProperty(CONFIG_APP_HOST));
-        return getPropertyValueAsString(property).orElseThrow(() -> createHostError(property));
+        return getPropertyValueAsString(property).orElseThrow(createHostError(property));
     }
 
     /**
@@ -91,7 +91,7 @@ public final class ConfigurationFactory {
     public String getMessagesBasename() {
         final var property = getProperty(CONFIG_MESSAGES_BASENAME);
         return getPropertyValueAsString(property)
-                .orElseThrow(() -> createMessagesBasenameError(property));
+                .orElseThrow(createMessagesBasenameError(property));
     }
 
     /**
@@ -105,7 +105,7 @@ public final class ConfigurationFactory {
                         .orElseGet(() -> getProperty(CONFIG_APP_PORT));
         return getPropertyValueAsInt(property)
                 .filter(ServiceUtils::isPositive)
-                .orElseThrow(() -> createPortError(property));
+                .orElseThrow(createPortError(property));
     }
 
     /**
@@ -119,7 +119,7 @@ public final class ConfigurationFactory {
                         .orElseGet(() -> getProperty(CONFIG_APP_PATH));
         return getPropertyValueAsString(property)
                 .map(value -> !value.startsWith("/") ? "/" + value : value)
-                .orElseThrow(() -> createPathError(property));
+                .orElseThrow(createPathError(property));
     }
 
     /**
@@ -136,7 +136,7 @@ public final class ConfigurationFactory {
                 .map(Path::normalize)
                 .map(Path::toAbsolutePath)
                 .map(Path::toString)
-                .orElseThrow(() -> createTemplatesError(property));
+                .orElseThrow(createTemplatesError(property));
     }
 
     /**
