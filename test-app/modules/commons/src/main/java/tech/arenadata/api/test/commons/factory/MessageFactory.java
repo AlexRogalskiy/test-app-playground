@@ -92,6 +92,6 @@ public final class MessageFactory {
      * @return resource message
      */
     public String getMessage(final String messageKey, final Object... arguments) {
-        return getMessage(messageKey, LocaleHolder.get(), arguments);
+        return this.getMessage(messageKey, LocaleHolder.get(), arguments);
     }
 }

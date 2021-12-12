@@ -72,6 +72,7 @@ public enum ConfigPropertyType implements ConfigurationProperty {
 	/**
 	 * Configuration property name
 	 */
+	@Getter(onMethod_ = {@Override})
 	private final String key;
 
 	/**

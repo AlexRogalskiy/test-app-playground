@@ -24,61 +24,65 @@
 package tech.arenadata.api.test.commons.exception;
 
 import lombok.NonNull;
+import tech.arenadata.api.test.commons.factory.MessageFactory;
 import tech.arenadata.api.test.commons.interfaces.ErrorTemplate;
 
-import static tech.arenadata.api.test.commons.enumeration.GeneralErrorTemplateType.DATA_JSON_PARSE_ERROR;
-import static tech.arenadata.api.test.commons.enumeration.GeneralErrorTemplateType.DATA_YAML_PARSE_ERROR;
-
 /**
- * Data parse {@link LocalizableException} implementation
+ * Localizable {@link RuntimeException} implementation
  */
-public class DataParseException extends LocalizableException {
+public class LocalizableException extends RuntimeException {
 	/**
 	 * Default explicit serialVersionUID for interoperability
 	 */
-	private static final long serialVersionUID = -8863630294671317139L;
+	private static final long serialVersionUID = 1802877451104409120L;
 
 	/**
-	 * {@link DataParseException} constructor with initial input message
+	 * {@link LocalizableException} constructor with initial input message
 	 *
 	 * @param template initial input {@link ErrorTemplate} message
 	 * @param args     initial input message {@link Object} collection of message arguments
 	 */
-	public DataParseException(final ErrorTemplate template, final Object... args) {
-		super(template, args);
+	public LocalizableException(final ErrorTemplate template, final Object... args) {
+		this(getLocalizedMessage(template, args));
 	}
 
 	/**
-	 * Returns {@link DataParseException} by input parameters
+	 * {@link LocalizableException} constructor with initial input message
 	 *
-	 * @param template initial input {@link ErrorTemplate} message
-	 * @param args     initial input message {@link Object} collection of message arguments
-	 * @return {@link DataParseException}
+	 * @param message initial input message {@link String}
 	 */
-	@NonNull
-	public static DataParseException createError(final ErrorTemplate template, final Object... args) {
-		return new DataParseException(template, args);
+	public LocalizableException(final String message) {
+		super(message);
 	}
 
 	/**
-	 * Returns json {@link DataParseException} by input parameters
+	 * {@link LocalizableException} constructor with initial input {@link Throwable}
 	 *
-	 * @param args initial input message arguments {@link Object}
-	 * @return json {@link DataParseException}
+	 * @param cause initial input cause target {@link Throwable}
 	 */
-	@NonNull
-	public static DataParseException createJsonParseError(final Object... args) {
-		return createError(DATA_JSON_PARSE_ERROR, args);
+	public LocalizableException(final Throwable cause) {
+		super(cause);
 	}
 
 	/**
-	 * Returns yaml {@link DataParseException} by input parameters
+	 * {@link LocalizableException} constructor with initial input message and {@link Throwable}
 	 *
-	 * @param args initial input message arguments {@link Object}
-	 * @return yaml {@link DataParseException}
+	 * @param message initial input message {@link String}
+	 * @param cause   initial input cause target {@link Throwable}
+	 */
+	public LocalizableException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
+
+	/**
+	 * Returns {@link LocalizableException} by input parameters
+	 *
+	 * @param template initial input {@link ErrorTemplate}
+	 * @param args     initial input {@link Object} collection of message arguments
+	 * @return {@link LocalizableException}
 	 */
 	@NonNull
-	public static DataParseException createYamlParseError(final Object... args) {
-		return createError(DATA_YAML_PARSE_ERROR, args);
+	public static String getLocalizedMessage(final ErrorTemplate template, final Object... args) {
+		return MessageFactory.getInstance().getMessage(template.getMessageCode(), args);
 	}
 }
