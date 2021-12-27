@@ -21,24 +21,53 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-package tech.arenadata.api.test.commons.factory;
+package tech.arenadata.api.test.commons.helper;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import lombok.experimental.UtilityClass;
+import static java.util.Optional.ofNullable;
 
-@UtilityClass
-public class ConfigurationConstants {
-    /** Default configuration property prefix */
-    public static final String CONFIG_PROPERTY_PREFIX = "config.";
-    /** Default error template property prefix */
-    public static final String ERROR_TEMPLATE_PREFIX = "error.";
+import java.util.Optional;
+import java.util.function.Function;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-    /** Default connect timeout */
-    public static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.of(5_000, ChronoUnit.MILLIS);
-    /** Default connect request timeout */
-    public static final Duration DEFAULT_CONNECTION_REQUEST_TIMEOUT =
-            Duration.of(5_000, ChronoUnit.MILLIS);
-    /** Default socket timeout */
-    public static final Duration DEFAULT_SOCKET_TIMEOUT = Duration.of(5_000, ChronoUnit.MILLIS);
+/**
+ * Monad wrapper helper
+ *
+ * @param <T> type of configurable item
+ */
+@RequiredArgsConstructor
+public final class WrapperMonad<T> {
+
+    private final T value;
+
+    @NonNull
+    public static <T> WrapperMonad<T> of(final T value) {
+        return new WrapperMonad<>(value);
+    }
+
+    @NonNull
+    public static <T, U> Function<T, WrapperMonad<U>> wrap(final Function<T, U> function) {
+        return value -> of(function.apply(value));
+    }
+
+    public T value() {
+        return this.value;
+    }
+
+    public Optional<T> optional() {
+        return ofNullable(this.value());
+    }
+
+    @NonNull
+    public <U> WrapperMonad<U> map(final Function<T, U> function) {
+        return of(function.apply(this.value));
+    }
+
+    public <U> WrapperMonad<U> flatMap(final Function<T, WrapperMonad<U>> function) {
+        return function.apply(this.value);
+    }
+
+    public boolean valueEquals(final T x) {
+        return this.value.equals(x);
+    }
 }
