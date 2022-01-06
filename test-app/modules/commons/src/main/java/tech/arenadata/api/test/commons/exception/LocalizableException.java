@@ -25,7 +25,7 @@ package tech.arenadata.api.test.commons.exception;
 
 import lombok.NonNull;
 import tech.arenadata.api.test.commons.factory.MessageFactory;
-import tech.arenadata.api.test.commons.interfaces.ErrorTemplate;
+import tech.arenadata.api.test.commons.interfaces.ErrorProperty;
 
 /** Localizable {@link RuntimeException} implementation */
 public class LocalizableException extends RuntimeException {
@@ -35,10 +35,10 @@ public class LocalizableException extends RuntimeException {
     /**
      * {@link LocalizableException} constructor with initial input message
      *
-     * @param template initial input {@link ErrorTemplate} message
+     * @param template initial input {@link ErrorProperty} message
      * @param args initial input message {@link Object} collection of message arguments
      */
-    public LocalizableException(final ErrorTemplate template, final Object... args) {
+    public LocalizableException(final ErrorProperty template, final Object... args) {
         this(getLocalizedMessage(template, args));
     }
 
@@ -73,12 +73,12 @@ public class LocalizableException extends RuntimeException {
     /**
      * Returns {@link LocalizableException} by input parameters
      *
-     * @param template initial input {@link ErrorTemplate}
+     * @param template initial input {@link ErrorProperty}
      * @param args initial input {@link Object} collection of message arguments
      * @return {@link LocalizableException}
      */
     @NonNull
-    public static String getLocalizedMessage(final ErrorTemplate template, final Object... args) {
+    public static String getLocalizedMessage(final ErrorProperty template, final Object... args) {
         return MessageFactory.getInstance().getMessage(template.getMessageCode(), args);
     }
 }

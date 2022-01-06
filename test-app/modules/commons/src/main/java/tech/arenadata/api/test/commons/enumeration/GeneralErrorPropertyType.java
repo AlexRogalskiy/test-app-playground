@@ -26,19 +26,21 @@ package tech.arenadata.api.test.commons.enumeration;
 import static tech.arenadata.api.test.commons.factory.ConfigurationConstants.ERROR_TEMPLATE_PREFIX;
 
 import lombok.ToString;
-import tech.arenadata.api.test.commons.interfaces.ErrorTemplate;
+import tech.arenadata.api.test.commons.interfaces.ErrorProperty;
 import tech.arenadata.api.test.extensions.annotation.GenerateResourceBundle;
 
-/** General {@link ErrorTemplate} message template codes */
+/** General {@link ErrorProperty} message template codes */
 @ToString
 @GenerateResourceBundle
-public enum GeneralErrorTemplateType implements ErrorTemplate {
+public enum GeneralErrorPropertyType implements ErrorProperty {
     /** Unsupported configuration scheme */
     CONFIGURATION_SCHEME_ERROR("configuration.app.scheme.invalid"),
     /** Unsupported configuration host */
     CONFIGURATION_HOST_ERROR("configuration.app.host.invalid"),
     /** Unsupported configuration port */
     CONFIGURATION_PORT_ERROR("configuration.app.port.invalid"),
+	/** Unsupported environment variable */
+	CONFIGURATION_ENV_VAR_ERROR("configuration.app.env.var.invalid"),
     /** Unsupported configuration path */
     CONFIGURATION_PATH_ERROR("configuration.app.path.invalid"),
     /** Unsupported messages basename */
@@ -58,7 +60,7 @@ public enum GeneralErrorTemplateType implements ErrorTemplate {
      *
      * @param code initial input {@link String} code to operate by
      */
-    GeneralErrorTemplateType(final String code) {
+    GeneralErrorPropertyType(final String code) {
         this.code = ERROR_TEMPLATE_PREFIX + code;
     }
 

@@ -23,11 +23,11 @@
  */
 package tech.arenadata.api.test.commons.exception;
 
-import static tech.arenadata.api.test.commons.enumeration.GeneralErrorTemplateType.DATA_JSON_PARSE_ERROR;
-import static tech.arenadata.api.test.commons.enumeration.GeneralErrorTemplateType.DATA_YAML_PARSE_ERROR;
+import static tech.arenadata.api.test.commons.enumeration.GeneralErrorPropertyType.DATA_JSON_PARSE_ERROR;
+import static tech.arenadata.api.test.commons.enumeration.GeneralErrorPropertyType.DATA_YAML_PARSE_ERROR;
 
 import lombok.NonNull;
-import tech.arenadata.api.test.commons.interfaces.ErrorTemplate;
+import tech.arenadata.api.test.commons.interfaces.ErrorProperty;
 
 /** Data parse {@link LocalizableException} implementation */
 public class DataParseException extends LocalizableException {
@@ -37,23 +37,23 @@ public class DataParseException extends LocalizableException {
     /**
      * {@link DataParseException} constructor with initial input message
      *
-     * @param template initial input {@link ErrorTemplate} message
+     * @param template initial input {@link ErrorProperty} message
      * @param args initial input message {@link Object} collection of message arguments
      */
-    public DataParseException(final ErrorTemplate template, final Object... args) {
+    public DataParseException(final ErrorProperty template, final Object... args) {
         super(template, args);
     }
 
     /**
      * Returns {@link DataParseException} by input parameters
      *
-     * @param template initial input {@link ErrorTemplate} message
+     * @param template initial input {@link ErrorProperty} message
      * @param args initial input message {@link Object} collection of message arguments
      * @return {@link DataParseException}
      */
     @NonNull
     public static DataParseException createError(
-            final ErrorTemplate template, final Object... args) {
+            final ErrorProperty template, final Object... args) {
         return new DataParseException(template, args);
     }
 

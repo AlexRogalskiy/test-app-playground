@@ -26,7 +26,7 @@ package tech.arenadata.api.test.commons.interfaces;
 import java.util.Collection;
 
 /** Error template declaration with message code binding */
-public interface ErrorTemplate {
+public interface ErrorProperty {
     /**
      * Returns {@link E} error template by input {@link String} message code
      *
@@ -35,7 +35,7 @@ public interface ErrorTemplate {
      * @param messageCode initial input {@link String} message code
      * @return {@link E} error template
      */
-    static <E extends ErrorTemplate> E findByCode(
+    static <E extends ErrorProperty> E findByCode(
             final Collection<E> values, final String messageCode) {
         return values.stream()
                 .filter(type -> type.getMessageCode().equalsIgnoreCase(messageCode))
@@ -51,7 +51,7 @@ public interface ErrorTemplate {
      * @param messageKey initial input {@link String} message key
      * @return {@link E} error template
      */
-    static <E extends ErrorTemplate> E findByKey(
+    static <E extends ErrorProperty> E findByKey(
             final Collection<E> values, final String messageKey) {
         return values.stream()
                 .filter(type -> type.getMessageKey().equalsIgnoreCase(messageKey))
