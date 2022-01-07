@@ -38,7 +38,7 @@ public interface ErrorProperty {
     static <E extends ErrorProperty> E findByCode(
             final Collection<E> values, final String messageCode) {
         return values.stream()
-                .filter(type -> type.getMessageCode().equalsIgnoreCase(messageCode))
+                .filter(type -> type.getCode().equalsIgnoreCase(messageCode))
                 .findFirst()
                 .orElse(null);
     }
@@ -54,22 +54,29 @@ public interface ErrorProperty {
     static <E extends ErrorProperty> E findByKey(
             final Collection<E> values, final String messageKey) {
         return values.stream()
-                .filter(type -> type.getMessageKey().equalsIgnoreCase(messageKey))
+                .filter(type -> type.getKey().equalsIgnoreCase(messageKey))
                 .findFirst()
                 .orElse(null);
     }
 
     /**
-     * Returns {@link String} template key
+     * Returns {@link String} error key
      *
      * @return {@link String} error message key
      */
-    String getMessageKey();
+    String getKey();
 
     /**
-     * Returns {@link String} template code
+     * Returns {@link String} error code
      *
      * @return {@link String} error message code
      */
-    String getMessageCode();
+    String getCode();
+
+    /**
+     * Returns {@link String} error description
+     *
+     * @return {@link String} error message description
+     */
+    String getDescription();
 }

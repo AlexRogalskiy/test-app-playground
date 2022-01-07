@@ -26,44 +26,47 @@ package tech.arenadata.api.test.commons.enumeration;
 import static tech.arenadata.api.test.commons.factory.ConfigurationConstants.CONFIG_PROPERTY_PREFIX;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /** Supported configuration properties enumeration. */
 @Getter
+@ToString
 public enum ConfigPropertyType implements ConfigurationProperty {
     /** Server scheme */
-    CONFIG_APP_SCHEME("app.scheme"),
+    CONFIG_APP_SCHEME("app.scheme", "Configuration application schema"),
     /** Server host */
-    CONFIG_APP_HOST("app.host"),
+    CONFIG_APP_HOST("app.host", "Configuration application host"),
     /** Server path */
-    CONFIG_APP_PATH("app.path"),
+    CONFIG_APP_PATH("app.path", "Configuration application path"),
     /** Server port */
-    CONFIG_APP_PORT("app.port"),
+    CONFIG_APP_PORT("app.port", "Configuration application port"),
     /** Resource bundle messages basename */
-    CONFIG_MESSAGES_BASENAME("messages.basename"),
+    CONFIG_MESSAGES_BASENAME("messages.basename", "Configuration messages basename"),
     /** Client connect timeout */
-    CONFIG_CLIENT_CONNECT_TIMEOUT("client.connect.timeout"),
+    CONFIG_CLIENT_CONNECT_TIMEOUT("client.connect.timeout", "Configuration client connect timeout"),
     /** Client connection request timeout */
-    CONFIG_CLIENT_CONNECTION_REQUEST_TIMEOUT("client.connection.request.timeout"),
+    CONFIG_CLIENT_CONNECTION_REQUEST_TIMEOUT(
+            "client.connection.request.timeout", "Configuration client connection request timeout"),
     /** Client connection request timeout */
-    CONFIG_CLIENT_SOCKET_TIMEOUT("client.socket.timeout"),
+    CONFIG_CLIENT_SOCKET_TIMEOUT("client.socket.timeout", "Configuration client socket timeout"),
     /** Template base directory */
-    CONFIG_TEMPLATES_BASEDIR("templates.basedir");
+    CONFIG_TEMPLATES_BASEDIR("templates.basedir", "Configuration templates base directory");
 
     /** Configuration property name */
     @Getter(onMethod_ = {@Override})
     private final String key;
+    /** Configuration property description */
+    @Getter(onMethod_ = {@Override})
+    private final String description;
 
     /**
      * Default property constructor by input {@link String} property key
      *
      * @param key initial input {@link String} key to operate by
+     * @param description initial input {@link String} description to operate by
      */
-    ConfigPropertyType(final String key) {
+    ConfigPropertyType(final String key, final String description) {
         this.key = CONFIG_PROPERTY_PREFIX + key;
-    }
-
-    @Override
-    public String toString() {
-        return this.key;
+        this.description = description;
     }
 }

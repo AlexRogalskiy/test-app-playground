@@ -25,6 +25,7 @@ package tech.arenadata.api.test.commons.enumeration;
 
 import static tech.arenadata.api.test.commons.factory.ConfigurationConstants.ERROR_TEMPLATE_PREFIX;
 
+import lombok.Getter;
 import lombok.ToString;
 import tech.arenadata.api.test.commons.interfaces.ErrorProperty;
 import tech.arenadata.api.test.extensions.annotation.GenerateResourceBundle;
@@ -34,43 +35,47 @@ import tech.arenadata.api.test.extensions.annotation.GenerateResourceBundle;
 @GenerateResourceBundle
 public enum GeneralErrorPropertyType implements ErrorProperty {
     /** Unsupported configuration scheme */
-    CONFIGURATION_SCHEME_ERROR("configuration.app.scheme.invalid"),
+    CONFIGURATION_SCHEME_ERROR("configuration.app.scheme.invalid", "Invalid application scheme"),
     /** Unsupported configuration host */
-    CONFIGURATION_HOST_ERROR("configuration.app.host.invalid"),
+    CONFIGURATION_HOST_ERROR("configuration.app.host.invalid", "Invalid application host"),
     /** Unsupported configuration port */
-    CONFIGURATION_PORT_ERROR("configuration.app.port.invalid"),
-	/** Unsupported environment variable */
-	CONFIGURATION_ENV_VAR_ERROR("configuration.app.env.var.invalid"),
+    CONFIGURATION_PORT_ERROR("configuration.app.port.invalid", "Invalid application port"),
+    /** Unsupported environment variable */
+    CONFIGURATION_ENV_VAR_ERROR(
+            "configuration.app.env.var.invalid", "Invalid application environment variable"),
     /** Unsupported configuration path */
-    CONFIGURATION_PATH_ERROR("configuration.app.path.invalid"),
+    CONFIGURATION_PATH_ERROR("configuration.app.path.invalid", "Invalid application path"),
     /** Unsupported messages basename */
-    CONFIGURATION_MESSAGES_BASENAME_ERROR("configuration.messages.basename.invalid"),
+    CONFIGURATION_MESSAGES_BASENAME_ERROR(
+            "configuration.messages.basename.invalid", "Invalid messages basename"),
     /** Unsupported templates basedir */
-    CONFIGURATION_TEMPLATES_DIR_ERROR("configuration.templates.basedir.invalid"),
+    CONFIGURATION_TEMPLATES_DIR_ERROR(
+            "configuration.templates.basedir.invalid", "Invalid templates base directory"),
     /** Invalid json parse exception */
-    DATA_JSON_PARSE_ERROR("data.json.parse.invalid"),
+    DATA_JSON_PARSE_ERROR("data.json.parse.invalid", "Invalid json parsing format"),
     /** Invalid yaml parse exception */
-    DATA_YAML_PARSE_ERROR("data.yaml.parse.invalid");
+    DATA_YAML_PARSE_ERROR("data.yaml.parse.invalid", "Invalid yaml parsing format");
 
-    /** {@link String} message code */
+    /** {@link String} error code */
+    @Getter(onMethod_ = {@Override})
     private final String code;
+    /** {@link String} error description */
+    @Getter(onMethod_ = {@Override})
+    private final String description;
 
     /**
      * Default error template constructor by input {@link String} error code
      *
      * @param code initial input {@link String} code to operate by
+     * @param description initial input {@link String} description to operate by
      */
-    GeneralErrorPropertyType(final String code) {
+    GeneralErrorPropertyType(final String code, final String description) {
         this.code = ERROR_TEMPLATE_PREFIX + code;
+        this.description = description;
     }
 
     @Override
-    public String getMessageKey() {
-        return this.name();
-    }
-
-    @Override
-    public String getMessageCode() {
+    public String getKey() {
         return this.code;
     }
 }

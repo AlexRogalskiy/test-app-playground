@@ -21,24 +21,33 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-package tech.arenadata.api.test.commons.enumeration;
+package tech.arenadata.api.test.commons.factory;
 
-/** Configuration property declaration */
+import java.util.Locale;
+import tech.arenadata.api.test.commons.helper.LocaleHolder;
+
+/** Messages interface declaration */
 @FunctionalInterface
-public interface ConfigurationProperty {
-    /**
-     * Returns {@link String} property key
-     *
-     * @return property key
-     */
-    String getKey();
+public interface Messages {
 
     /**
-     * Returns {@link String} property description
+     * Returns {@link String} message by input parameters
      *
-     * @return property description
+     * @param code initial input {@link String} message key
+     * @param locale initial input {@link Locale} message locale
+     * @param values initial input {@link Object} collection of message arguments
+     * @return resource message
      */
-    default String getDescription() {
-        return this.getKey();
+    String getMessage(final String code, final Locale locale, final Object... values);
+
+    /**
+     * Returns {@link String} message by input parameters
+     *
+     * @param code initial input {@link String} message key
+     * @param values initial input {@link Object} collection of message arguments
+     * @return resource message
+     */
+    default String getMessage(final String code, final Object... values) {
+        return this.getMessage(code, LocaleHolder.get(), values);
     }
 }

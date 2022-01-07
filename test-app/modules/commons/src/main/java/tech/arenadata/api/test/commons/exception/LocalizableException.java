@@ -79,6 +79,6 @@ public class LocalizableException extends RuntimeException {
      */
     @NonNull
     public static String getLocalizedMessage(final ErrorProperty template, final Object... args) {
-        return MessageFactory.getInstance().getMessage(template.getMessageCode(), args);
+        return MessageFactory.getInstance().getMessage(template.getCode(), args);
     }
 }
