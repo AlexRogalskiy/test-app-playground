@@ -23,7 +23,9 @@
  */
 package tech.arenadata.api.test.commons.factory;
 
+import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import tech.arenadata.api.test.commons.helper.MessageFormatHolder;
@@ -32,7 +34,7 @@ import tech.arenadata.api.test.commons.helper.MessageFormatHolder;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MessageFactory implements Messages {
 
-    /** Message factory default instance */
+    /** Default message factory instance */
     private static MessageFactory INSTANCE;
 
     /**
@@ -49,6 +51,34 @@ public final class MessageFactory implements Messages {
     }
 
     /**
+     * Formats a message from the specified {@link ResourceBundle} using the specified arguments.
+     *
+     * <p>
+     *
+     * @param bundle the {@link ResourceBundle} containing the message pattern
+     * @param locale the {@link Locale} (see {@link MessageFormat#setLocale(Locale)})
+     * @param messageKey the key of the message pattern in the {@link ResourceBundle}
+     * @param values the arguments needed for formatting the message
+     * @return the formatted message
+     */
+    private static String format(
+            final ResourceBundle bundle,
+            final Locale locale,
+            final String messageKey,
+            final Object... values) {
+        final var pattern = bundle.getString(messageKey);
+        if (values != null && values.length > 0) {
+            final var formatter = MessageFormatHolder.get();
+            formatter.setLocale(locale);
+            formatter.applyPattern(pattern);
+
+            return formatter.format(values);
+        }
+
+        return pattern;
+    }
+
+    /**
      * Returns {@link String} localized message by input parameters
      *
      * @param messageKey initial input {@link String} message key
@@ -57,15 +87,9 @@ public final class MessageFactory implements Messages {
      * @return localized resource message
      */
     @Override
-    public String getMessage(final String messageKey, final Locale locale, final Object... values) {
+    public String getMessage(final Locale locale, final String messageKey, final Object... values) {
         final var bundle = ResourceBundleFactory.getInstance().getResourceBundle(locale);
-        final var pattern = bundle.getString(messageKey);
-        if (values != null && values.length > 0) {
-            final var formatter = MessageFormatHolder.get();
-            formatter.applyPattern(pattern);
-            return formatter.format(values);
-        }
 
-        return pattern;
+        return format(bundle, locale, messageKey, values);
     }
 }

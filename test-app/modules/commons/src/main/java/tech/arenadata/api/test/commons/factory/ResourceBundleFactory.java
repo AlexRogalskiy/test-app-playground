@@ -23,11 +23,11 @@
  */
 package tech.arenadata.api.test.commons.factory;
 
+import static java.util.Locale.ENGLISH;
 import static java.util.Locale.getDefault;
 import static java.util.ResourceBundle.getBundle;
 
 import java.util.Locale;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -36,8 +36,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ResourceBundleFactory {
 
-    /** Default resource bundle name */
-    public static final String DEFAULT_BUNDLE = "messages";
+    /** Default resource bundle base name */
+    private static final String DEFAULT_BUNDLE_BASE_NAME = "messages";
+
+    /** Default resource bundle locale */
+    private static final Locale DEFAULT_BUNDLE_LOCALE = ENGLISH;
+
+    /** Default resource bundle instance */
+    private static final ResourceBundle DEFAULT_BUNDLE =
+            getBundle(getDefaultBundleBaseName(), getDefaultLocale());
 
     /** Resource bundle factory default instance */
     private static final ResourceBundleFactory INSTANCE = new ResourceBundleFactory();
@@ -52,6 +59,48 @@ public final class ResourceBundleFactory {
     }
 
     /**
+     * Returns the default {@link Locale} for the application, which is set to {@link
+     * Locale#ENGLISH} since that's the only available {@link ResourceBundle} at time of writing.
+     *
+     * @return the default {@link Locale}
+     */
+    public static Locale getDefaultLocale() {
+        return DEFAULT_BUNDLE_LOCALE;
+    }
+
+    /**
+     * Returns the default {@link String} bundle base name
+     *
+     * @return the default {@link String} bundle base name
+     */
+    public static String getDefaultBundleBaseName() {
+        return DEFAULT_BUNDLE_BASE_NAME;
+    }
+
+    /**
+     * Returns the {@link ResourceBundle} for the default {@link Locale}.
+     *
+     * @return the {@link ResourceBundle} for the default {@link Locale}
+     */
+    public static ResourceBundle getDefaultBundle() {
+        return DEFAULT_BUNDLE;
+    }
+
+    private static Locale getLocale(final String bundle) {
+        final var first = bundle.indexOf('_');
+        final var second = bundle.indexOf('_', first + 1);
+
+        if (first != -1) {
+            final var language = bundle.substring(first + 1, second);
+            final var country = bundle.substring(second + 1);
+
+            return new Locale(language, country);
+        }
+
+        return getDefault();
+    }
+
+    /**
      * Returns {@link ResourceBundle} by input locale
      *
      * @param locale initial input {@link Locale} locale to operate by
@@ -59,7 +108,8 @@ public final class ResourceBundleFactory {
      */
     public ResourceBundle getResourceBundle(final Locale locale) {
         final var basename = ConfigurationFactory.getInstance().getMessagesBasename();
-        return getResourceBundle(basename, locale);
+
+        return this.getResourceBundle(basename, locale);
     }
 
     /**
@@ -70,29 +120,19 @@ public final class ResourceBundleFactory {
      * @return localized resource bundle
      */
     public ResourceBundle getResourceBundle(final String basename, final Locale locale) {
-        return getBundle(basename, locale);
-    }
-
-    public ResourceBundle getResourceBundle(final String bundle) {
-        final var locale = getLocale(bundle);
         try {
-            return getBundle(bundle, locale);
-        } catch (MissingResourceException exp) {
-            return getBundle(DEFAULT_BUNDLE, locale);
+            return getBundle(basename, locale);
+        } catch (Exception e) {
+            return getDefaultBundle();
         }
     }
 
-    private Locale getLocale(final String bundle) {
-        final var first = bundle.indexOf('_');
-        final var second = bundle.indexOf('_', first + 1);
-
-        Locale locale;
-        if (first != -1) {
-            final var language = bundle.substring(first + 1, second);
-            final var country = bundle.substring(second + 1);
-            return new Locale(language, country);
+    public ResourceBundle getResourceBundle(final String basename) {
+        final var locale = getLocale(basename);
+        try {
+            return this.getResourceBundle(basename, locale);
+        } catch (Exception e) {
+            return this.getResourceBundle(getDefaultBundleBaseName(), locale);
         }
-
-        return getDefault();
     }
 }

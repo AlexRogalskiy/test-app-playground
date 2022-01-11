@@ -33,12 +33,12 @@ public interface Messages {
     /**
      * Returns {@link String} message by input parameters
      *
-     * @param code initial input {@link String} message key
      * @param locale initial input {@link Locale} message locale
+     * @param code initial input {@link String} message key
      * @param values initial input {@link Object} collection of message arguments
      * @return resource message
      */
-    String getMessage(final String code, final Locale locale, final Object... values);
+    String getMessage(final Locale locale, final String code, final Object... values);
 
     /**
      * Returns {@link String} message by input parameters
@@ -48,6 +48,6 @@ public interface Messages {
      * @return resource message
      */
     default String getMessage(final String code, final Object... values) {
-        return this.getMessage(code, LocaleHolder.get(), values);
+        return this.getMessage(LocaleHolder.get(), code, values);
     }
 }
