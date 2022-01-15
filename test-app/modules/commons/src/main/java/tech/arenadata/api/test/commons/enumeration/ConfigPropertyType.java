@@ -23,15 +23,14 @@
  */
 package tech.arenadata.api.test.commons.enumeration;
 
-import static tech.arenadata.api.test.commons.factory.ConfigurationConstants.CONFIG_PROPERTY_PREFIX;
-
 import lombok.Getter;
 import lombok.ToString;
+import tech.arenadata.api.test.commons.interfaces.PropertyTemplate;
 
-/** Supported configuration properties enumeration. */
+/** Supported configuration property type. */
 @Getter
 @ToString
-public enum ConfigPropertyType implements ConfigurationProperty {
+public enum ConfigPropertyType implements PropertyTemplate {
     /** Server scheme */
     CONFIG_APP_SCHEME("app.scheme", "Configuration application schema"),
     /** Server host */
@@ -66,7 +65,7 @@ public enum ConfigPropertyType implements ConfigurationProperty {
      * @param description initial input {@link String} description to operate by
      */
     ConfigPropertyType(final String key, final String description) {
-        this.key = CONFIG_PROPERTY_PREFIX + key;
+        this.key = NamespaceType.CONFIG.apply(key);
         this.description = description;
     }
 }

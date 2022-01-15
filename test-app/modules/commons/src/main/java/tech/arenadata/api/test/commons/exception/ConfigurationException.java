@@ -23,11 +23,11 @@
  */
 package tech.arenadata.api.test.commons.exception;
 
-import static tech.arenadata.api.test.commons.enumeration.GeneralErrorPropertyType.*;
+import static tech.arenadata.api.test.commons.enumeration.ErrorPropertyType.*;
 
 import java.util.function.Supplier;
 import lombok.NonNull;
-import tech.arenadata.api.test.commons.interfaces.ErrorProperty;
+import tech.arenadata.api.test.commons.interfaces.PropertyTemplate;
 
 /** Configuration {@link LocalizableException} implementation */
 public class ConfigurationException extends LocalizableException {
@@ -37,23 +37,23 @@ public class ConfigurationException extends LocalizableException {
     /**
      * {@link ConfigurationException} constructor with initial input message
      *
-     * @param template initial input {@link ErrorProperty} message
+     * @param template initial input {@link PropertyTemplate} message
      * @param args initial input message {@link Object} collection of message arguments
      */
-    public ConfigurationException(final ErrorProperty template, final Object... args) {
+    public ConfigurationException(final PropertyTemplate template, final Object... args) {
         super(template, args);
     }
 
     /**
      * Returns {@link ConfigurationException} by input parameters
      *
-     * @param template initial input {@link ErrorProperty} message
+     * @param template initial input {@link PropertyTemplate} message
      * @param args initial input message {@link Object} collection of message arguments
      * @return {@link ConfigurationException}
      */
     @NonNull
     public static Supplier<ConfigurationException> createError(
-            final ErrorProperty template, final Object... args) {
+            final PropertyTemplate template, final Object... args) {
         return () -> new ConfigurationException(template, args);
     }
 

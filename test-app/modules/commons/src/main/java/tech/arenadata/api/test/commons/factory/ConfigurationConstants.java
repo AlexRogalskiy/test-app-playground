@@ -27,12 +27,15 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import lombok.experimental.UtilityClass;
 
+/** Configuration property constants */
 @UtilityClass
 public class ConfigurationConstants {
     /** Default configuration property prefix */
-    public static final String CONFIG_PROPERTY_PREFIX = "config.";
-    /** Default error template property prefix */
-    public static final String ERROR_TEMPLATE_PREFIX = "error.";
+    public static final String PROPERTY_DELIMITER = ".";
+    //    /** Default configuration property prefix */
+    //    public static final String CONFIG_PROPERTY_PREFIX = "config" + PROPERTY_DELIMITER;
+    //    /** Default error template property prefix */
+    //    public static final String ERROR_TEMPLATE_PREFIX = "error" + PROPERTY_DELIMITER;
 
     /** Default connect timeout */
     public static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.of(5_000, ChronoUnit.MILLIS);

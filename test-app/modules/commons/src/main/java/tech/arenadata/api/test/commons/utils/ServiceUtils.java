@@ -189,6 +189,7 @@ public class ServiceUtils {
      * @param validator initial input {@link Function} validator
      * @return computed {@link T} property value
      */
+    @SuppressWarnings("unused")
     private static <T> Optional<T> getProperty(
             final String value, final Function<String, T> validator) {
         try {

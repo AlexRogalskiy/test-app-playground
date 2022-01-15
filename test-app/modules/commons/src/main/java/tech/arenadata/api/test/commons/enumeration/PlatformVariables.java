@@ -30,9 +30,9 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
-import tech.arenadata.api.test.commons.interfaces.ErrorProperty;
+import tech.arenadata.api.test.commons.interfaces.PropertyTemplate;
 
-/** General {@link ErrorProperty} message template codes */
+/** General {@link PropertyTemplate} message template codes */
 public enum PlatformVariables implements Supplier<String> {
     /** Configuration app scheme */
     CONFIG_APP_SCHEME,
@@ -56,7 +56,7 @@ public enum PlatformVariables implements Supplier<String> {
      * @return map collection of platform properties
      */
     public static Map<PlatformVariables, Object> toMap(final Map<String, Object> envs) {
-        final var map = new EnumMap<PlatformVariables, Object>(PlatformVariables.class);
+        final var map = new EnumMap<>(PlatformVariables.class);
 
         for (final var variable : PlatformVariables.values()) {
             final var value = envs.get(variable.get());

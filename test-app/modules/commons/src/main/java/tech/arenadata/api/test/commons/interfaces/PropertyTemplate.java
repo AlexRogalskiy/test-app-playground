@@ -25,17 +25,18 @@ package tech.arenadata.api.test.commons.interfaces;
 
 import java.util.Collection;
 
-/** Error template declaration with message code binding */
-public interface ErrorProperty {
+/** General property template declaration with key, code and description */
+@FunctionalInterface
+public interface PropertyTemplate {
     /**
-     * Returns {@link E} error template by input {@link String} message code
+     * Returns {@link E} property template by input {@link String} code
      *
      * @param <E> type of enumeration
      * @param values initial input {@link E} collection of values
      * @param messageCode initial input {@link String} message code
-     * @return {@link E} error template
+     * @return {@link E} property template
      */
-    static <E extends ErrorProperty> E findByCode(
+    static <E extends PropertyTemplate> E findByCode(
             final Collection<E> values, final String messageCode) {
         return values.stream()
                 .filter(type -> type.getCode().equalsIgnoreCase(messageCode))
@@ -44,14 +45,14 @@ public interface ErrorProperty {
     }
 
     /**
-     * Returns {@link E} error template by input {@link String} message key
+     * Returns {@link E} property template by input {@link String} key
      *
      * @param <E> type of enumeration
      * @param values initial input {@link E} collection of values
      * @param messageKey initial input {@link String} message key
-     * @return {@link E} error template
+     * @return {@link E} property template
      */
-    static <E extends ErrorProperty> E findByKey(
+    static <E extends PropertyTemplate> E findByKey(
             final Collection<E> values, final String messageKey) {
         return values.stream()
                 .filter(type -> type.getKey().equalsIgnoreCase(messageKey))
@@ -60,23 +61,27 @@ public interface ErrorProperty {
     }
 
     /**
-     * Returns {@link String} error key
+     * Returns {@link String} property key
      *
-     * @return {@link String} error message key
+     * @return property key
      */
     String getKey();
 
     /**
-     * Returns {@link String} error code
+     * Returns {@link String} property code
      *
-     * @return {@link String} error message code
+     * @return property code
      */
-    String getCode();
+    default String getCode() {
+        return this.getKey();
+    }
 
     /**
-     * Returns {@link String} error description
+     * Returns {@link String} property description
      *
-     * @return {@link String} error message description
+     * @return property description
      */
-    String getDescription();
+    default String getDescription() {
+        return this.getKey();
+    }
 }

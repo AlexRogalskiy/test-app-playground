@@ -23,17 +23,15 @@
  */
 package tech.arenadata.api.test.commons.enumeration;
 
-import static tech.arenadata.api.test.commons.factory.ConfigurationConstants.ERROR_TEMPLATE_PREFIX;
-
 import lombok.Getter;
 import lombok.ToString;
-import tech.arenadata.api.test.commons.interfaces.ErrorProperty;
+import tech.arenadata.api.test.commons.interfaces.PropertyTemplate;
 import tech.arenadata.api.test.extensions.annotation.GenerateResourceBundle;
 
-/** General {@link ErrorProperty} message template codes */
+/** Supported error property type. */
 @ToString
 @GenerateResourceBundle
-public enum GeneralErrorPropertyType implements ErrorProperty {
+public enum ErrorPropertyType implements PropertyTemplate {
     /** Unsupported configuration scheme */
     CONFIGURATION_SCHEME_ERROR("configuration.app.scheme.invalid", "Invalid application scheme"),
     /** Unsupported configuration host */
@@ -56,9 +54,9 @@ public enum GeneralErrorPropertyType implements ErrorProperty {
     /** Invalid yaml parse exception */
     DATA_YAML_PARSE_ERROR("data.yaml.parse.invalid", "Invalid yaml parsing format");
 
-    /** {@link String} error code */
+    /** {@link String} error key */
     @Getter(onMethod_ = {@Override})
-    private final String code;
+    private final String key;
     /** {@link String} error description */
     @Getter(onMethod_ = {@Override})
     private final String description;
@@ -66,16 +64,11 @@ public enum GeneralErrorPropertyType implements ErrorProperty {
     /**
      * Default error template constructor by input {@link String} error code
      *
-     * @param code initial input {@link String} code to operate by
+     * @param key initial input {@link String} code to operate by
      * @param description initial input {@link String} description to operate by
      */
-    GeneralErrorPropertyType(final String code, final String description) {
-        this.code = ERROR_TEMPLATE_PREFIX + code;
+    ErrorPropertyType(final String key, final String description) {
+        this.key = NamespaceType.ERROR.apply(key);
         this.description = description;
-    }
-
-    @Override
-    public String getKey() {
-        return this.code;
     }
 }
