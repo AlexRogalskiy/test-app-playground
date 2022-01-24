@@ -24,11 +24,15 @@
 package tech.arenadata.api.test.commons.enumeration;
 
 import static java.util.Optional.ofNullable;
-import static tech.arenadata.api.test.commons.utils.ConfigurationUtils.getProperties;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toMap;
+import static tech.arenadata.api.test.commons.utils.ConfigurationUtils.getPropertyMap;
 
-import java.util.EnumMap;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import tech.arenadata.api.test.commons.interfaces.PropertyTemplate;
 
@@ -46,7 +50,8 @@ public enum PlatformVariables implements Supplier<String> {
     CONFIG_TEMPLATES_DIR;
 
     /** Default platform properties */
-    private static final Map<PlatformVariables, Object> DEFAULT_PROPERTIES = toMap(getProperties());
+    private static final Map<PlatformVariables, Object> DEFAULT_PROPERTIES =
+            convertToMap(getPropertyMap());
 
     /**
      * Returns {@link Map} collection of platform properties by input {@link Map} collection of
@@ -55,17 +60,13 @@ public enum PlatformVariables implements Supplier<String> {
      * @param envs initial input {@link Map} collection of environment properties to operate by
      * @return map collection of platform properties
      */
-    public static Map<PlatformVariables, Object> toMap(final Map<String, Object> envs) {
-        final var map = new EnumMap<>(PlatformVariables.class);
-
-        for (final var variable : PlatformVariables.values()) {
-            final var value = envs.get(variable.get());
-            if (value != null) {
-                map.put(variable, value);
-            }
-        }
-
-        return map;
+    public static Map<PlatformVariables, Object> convertToMap(final Map<String, Object> envs) {
+        return Arrays.stream(values())
+                .filter(value -> envs.containsKey(value.get()))
+                .collect(
+                        collectingAndThen(
+                                toMap(Function.identity(), value -> envs.get(value.get())),
+                                Collections::unmodifiableMap));
     }
 
     /**

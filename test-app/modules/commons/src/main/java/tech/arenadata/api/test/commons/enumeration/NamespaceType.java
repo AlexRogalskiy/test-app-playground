@@ -43,7 +43,9 @@ public enum NamespaceType implements Function<String, String> {
     /** Configuration namespace prefix */
     CONFIG("config"),
     /** Custom namespace prefix */
-    CUSTOM("custom");
+    CUSTOM("custom"),
+	/** General namespace prefix */
+	GENERAL("general");
 
     /** Namespace prefix */
     private final String prefix;
@@ -52,17 +54,16 @@ public enum NamespaceType implements Function<String, String> {
      * Returns {@link NamespaceType} by input {@link String} environment name or default namespace,
      * if not supported
      *
-     * @param environmentName initial input {@link String} environment name to operate by
-     * @param defaultEnvironment initial input {@link String} default environment name to operate by
+     * @param envName initial input {@link String} environment name to operate by
+     * @param defaultEnv initial input {@link String} default namespace to operate by
      * @return namespace type
      */
     @NonNull
-    public static NamespaceType getOrDefault(
-            final String environmentName, final NamespaceType defaultEnvironment) {
+    public static NamespaceType getOrDefault(final String envName, final NamespaceType defaultEnv) {
         return Arrays.stream(values())
-                .filter(value -> value.name().equalsIgnoreCase(environmentName))
+                .filter(value -> value.name().equalsIgnoreCase(envName))
                 .findFirst()
-                .orElse(defaultEnvironment);
+                .orElse(defaultEnv);
     }
 
     /**

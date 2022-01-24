@@ -23,6 +23,8 @@
  */
 package tech.arenadata.api.test.commons.enumeration;
 
+import static tech.arenadata.api.test.commons.enumeration.NamespaceType.CONFIG;
+
 import lombok.Getter;
 import lombok.ToString;
 import tech.arenadata.api.test.commons.interfaces.PropertyTemplate;
@@ -65,7 +67,7 @@ public enum ConfigPropertyType implements PropertyTemplate {
      * @param description initial input {@link String} description to operate by
      */
     ConfigPropertyType(final String key, final String description) {
-        this.key = NamespaceType.CONFIG.apply(key);
+        this.key = CONFIG.apply(key);
         this.description = description;
     }
 }

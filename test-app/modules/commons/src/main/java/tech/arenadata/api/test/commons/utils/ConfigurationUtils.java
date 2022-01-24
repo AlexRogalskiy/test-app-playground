@@ -24,18 +24,20 @@
 package tech.arenadata.api.test.commons.utils;
 
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Supplier;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import tech.arenadata.api.test.commons.enumeration.ConfigPropertyType;
 
 /** General utilities for accessing configuration properties */
@@ -46,7 +48,7 @@ public class ConfigurationUtils {
     private static final String CONFIGURATION_FILE =
             Paths.get(getConfigurationDir(), "config.properties").toString();
 
-    private static final Properties properties = getProps();
+    private static final Properties properties = getGeneralProperties();
 
     public static Supplier<String> getPropertySupplier(final ConfigPropertyType property) {
         return () -> getProperty(property);
@@ -72,43 +74,47 @@ public class ConfigurationUtils {
         return properties.getProperty(property, defaultValue);
     }
 
-    public static Map<String, Object> getProperties() {
-        return properties.keySet().stream().collect(toMap(Object::toString, properties::get));
+    public static Map<String, Object> getPropertyMap() {
+        return properties.keySet().stream()
+                .collect(
+                        collectingAndThen(
+                                toMap(Object::toString, properties::get),
+                                Collections::unmodifiableMap));
     }
 
-    public static Map<String, String> getPrefixedEntries(final String prefix) {
+    public static Map<String, String> getPropertyMap(final String prefix) {
         final var prefixLength = prefix.length();
-        final var entries = new HashMap<String, String>();
-        for (final var key : properties.stringPropertyNames()) {
-            if (key.startsWith(prefix)) {
-                entries.put(key.substring(prefixLength), properties.getProperty(key));
-            }
-        }
-
-        return entries;
+        return properties.stringPropertyNames().stream()
+                .filter(key -> StringUtils.startsWithIgnoreCase(key, prefix))
+                .collect(
+                        collectingAndThen(
+                                toMap(key -> key.substring(prefixLength), properties::getProperty),
+                                Collections::unmodifiableMap));
     }
 
     public static Map<String, Object> getPropertiesByKey(final String key) {
         return properties.entrySet().stream()
                 .filter(e -> e.getKey().toString().startsWith(key))
                 .collect(
-                        toMap(
-                                e -> e.getKey().toString().replace(key.concat("."), EMPTY),
-                                Map.Entry::getValue));
+                        collectingAndThen(
+                                toMap(
+                                        e -> e.getKey().toString().replace(key.concat("."), EMPTY),
+                                        Map.Entry::getValue),
+                                Collections::unmodifiableMap));
     }
 
-    public static Properties getProps() {
+    public static Properties getGeneralProperties() {
         final var properties = new Properties();
-        final var systemProperties = getSystemProps();
+        final var systemProperties = getSystemProperties();
         systemProperties.keySet().forEach(k -> properties.put(k, systemProperties.get(k)));
 
-        final var configProperties = getConfigurationProps();
+        final var configProperties = getConfigurationProperties();
         configProperties.keySet().forEach(k -> properties.put(k, configProperties.get(k)));
 
         return properties;
     }
 
-    private static Properties getSystemProps() {
+    private static Properties getSystemProperties() {
         try {
             return System.getProperties();
         } catch (Exception ex) {
@@ -117,18 +123,31 @@ public class ConfigurationUtils {
         }
     }
 
-    @SneakyThrows
-    private static Properties getConfigurationProps() {
+    private static Properties getConfigurationProperties() {
         final var properties = new Properties();
+        loadProperty(properties, CONFIGURATION_FILE);
+
+        return properties;
+    }
+
+    public static Properties loadProperty(final String... filePaths) {
+        final var properties = new Properties();
+        for (final var path : filePaths) {
+            loadProperty(properties, path);
+        }
+
+        return properties;
+    }
+
+    @SneakyThrows
+    private static void loadProperty(final Properties properties, final String filePath) {
         try (final var fileStream =
-                ConfigurationUtils.class.getClassLoader().getResourceAsStream(CONFIGURATION_FILE)) {
+                ConfigurationUtils.class.getClassLoader().getResourceAsStream(filePath)) {
             properties.load(fileStream);
         } catch (IOException ex) {
             log.error("Configuration properties could not be loaded.", ex);
             throw ex;
         }
-
-        return properties;
     }
 
     private static String getConfigurationDir() {
