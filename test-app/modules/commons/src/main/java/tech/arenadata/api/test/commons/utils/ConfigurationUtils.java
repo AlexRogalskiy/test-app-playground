@@ -29,6 +29,7 @@ import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Map;
@@ -139,16 +140,34 @@ public class ConfigurationUtils {
         return properties;
     }
 
-    @SneakyThrows
+	public static Properties loadProperty(final String string, final String delim) {
+		final var properties = new Properties();
+		final var formattedString = string.trim().replace(delim, System.lineSeparator());
+		loadString(properties, formattedString);
+
+		return properties;
+	}
+
+	@SneakyThrows
     private static void loadProperty(final Properties properties, final String filePath) {
-        try (final var fileStream =
+        try (final var fileReader =
                 ConfigurationUtils.class.getClassLoader().getResourceAsStream(filePath)) {
-            properties.load(fileStream);
+            properties.load(fileReader);
         } catch (IOException ex) {
             log.error("Configuration properties could not be loaded.", ex);
             throw ex;
         }
     }
+
+	@SneakyThrows
+	private static void loadString(final Properties properties, final String formattedString) {
+		try (final var stringReader = new StringReader(formattedString)) {
+			properties.load(stringReader);
+		} catch (IOException ex) {
+			log.error("Configuration properties could not be loaded.", ex);
+			throw ex;
+		}
+	}
 
     private static String getConfigurationDir() {
         return ofNullable(System.getenv("CONFIG_DIR")).orElse(EMPTY);
