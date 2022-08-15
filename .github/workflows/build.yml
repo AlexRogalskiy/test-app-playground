@@ -49,7 +49,7 @@ jobs:
           architecture: ${{ matrix.architecture }}
 
       - name: Cache Maven repository
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.0.7
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-${{ matrix.java }}-maven-${{ hashFiles('**/*pom*.xml') }}
