@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Stop old builds
         if: github.ref != 'refs/heads/master'
-        uses: styfle/cancel-workflow-action@0.9.1
+        uses: styfle/cancel-workflow-action@0.10.1
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
