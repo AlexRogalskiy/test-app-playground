@@ -1,6 +1,6 @@
 click==7.1.2
 contextlib2==0.6.0.post1
-Flask==1.1.4
+Flask==2.3.3
 itsdangerous==1.1.0
 Jinja2==2.11.3
 MarkupSafe==1.1.1
