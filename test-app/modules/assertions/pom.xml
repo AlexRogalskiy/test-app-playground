@@ -20,7 +20,7 @@
 	<properties>
 		<!-- versions -->
 		<commons-lang3.version>3.12.0</commons-lang3.version>
-		<commons-io.version>2.11.0</commons-io.version>
+		<commons-io.version>2.14.0</commons-io.version>
 		<httpcore.version>4.4.14</httpcore.version>
 
 		<test-api.version>1.0.0</test-api.version>
