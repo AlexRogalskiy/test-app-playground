@@ -19,7 +19,7 @@
 
 	<properties>
 		<!-- versions -->
-		<allure.version>2.16.1</allure.version>
+		<allure.version>2.35.5</allure.version>
 		<junit-platform.version>1.8.1</junit-platform.version>
 		<selenide.version>6.1.1</selenide.version>
 		<httpmime.version>4.5.13</httpmime.version>
