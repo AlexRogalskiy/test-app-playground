@@ -48,7 +48,7 @@
 		<logstash-logback.version>7.0.1</logstash-logback.version>
 
 		<!-- plugins -->
-		<maven-os-plugin.version>1.7.0</maven-os-plugin.version>
+		<maven-os-plugin.version>1.7.1</maven-os-plugin.version>
 		<maven-cucumber-reporting.version>5.6.2</maven-cucumber-reporting.version>
 		<maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
 		<maven-spotless-plugin.version>2.17.4</maven-spotless-plugin.version>
