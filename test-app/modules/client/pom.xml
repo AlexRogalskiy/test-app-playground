@@ -19,7 +19,7 @@
 
 	<properties>
 		<!-- versions -->
-		<httpclient.version>4.5.13</httpclient.version>
+		<httpclient.version>4.5.14</httpclient.version>
 
 		<test-api.version>1.0.0</test-api.version>
 	</properties>
